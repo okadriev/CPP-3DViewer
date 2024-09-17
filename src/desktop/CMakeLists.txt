@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(viewer VERSION 0.1 LANGUAGES CXX)
+project(viewer VERSION 2.0 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

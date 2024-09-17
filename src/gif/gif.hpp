@@ -5,7 +5,7 @@
 #include <QBuffer>
 #include <QImage>
 #include <QMessageBox>
-#include <QOpenGLWidget>
+#include <QGLWidget>
 #include <QPixmap>
 #include <QTimer>
 

@@ -36,7 +36,7 @@ void start_record(const QString& filename, QOpenGLWidget* openGLWidget) {
 }
 
 bool record_screencast_loop(UserData* data) {
-  QPixmap pixmap = data->openGLWidget->grab();
+  QPixmap pixmap = QPixmap::grabWidget(data->openGLWidget);
   QImage image = pixmap.toImage();
   record_frame(data->gif, &image);
 
