@@ -1,5 +1,6 @@
-QT       += core gui \
-            widgets opengl
+QT += core gui opengl openglwidgets
+
+INCLUDEPATH += $$[QT_INSTALL_HEADERS]
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,6 +23,8 @@ HEADERS += \
 
 FORMS += \
     mainwindow.ui
+
+LIBS += -lgif
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
