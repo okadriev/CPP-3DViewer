@@ -32,7 +32,7 @@ Figure Figure::parce(char* filename) {
 
   for (const auto& shape : shapes) {
     for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); f++) {
-      int fv = shape.mesh.num_face_vertices[f];
+      size_t fv = shape.mesh.num_face_vertices[f];
       for (size_t v = 0; v < fv; v++) {
         tinyobj::index_t idx = shape.mesh.indices[f * fv + v];
         tinyobj::index_t idx_next = shape.mesh.indices[f * fv + (v + 1) % fv];
@@ -41,6 +41,8 @@ Figure Figure::parce(char* filename) {
       }
     }
   }
+
+  return *this;
 }
 
 Figure Figure::normalize() {
@@ -59,7 +61,7 @@ Figure Figure::normalize() {
   if (z == 0) z = 0.01;
   scale /= (x > y) ? ((x > z) ? x : z) : ((y > z) ? y : z);
 
-  for (int i = 0; i < points.size(); i += 3) {
+  for (size_t i = 0; i < points.size(); i += 3) {
     Point point = {points[i], points[i + 1], points[i + 2]};
     point.move(info->trans_x / scale - x_center,
                info->trans_y / scale - y_center,
@@ -71,6 +73,8 @@ Figure Figure::normalize() {
     points[i + 1] = point.y;
     points[i + 2] = point.z;
   }
+
+  return *this;
 }
 
 Figure* get_figure() {

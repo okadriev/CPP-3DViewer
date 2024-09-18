@@ -143,10 +143,10 @@ namespace tinyobj {
 //
 
 #ifdef TINYOBJLOADER_USE_DOUBLE
-//#pragma message "using double"
+// #pragma message "using double"
 typedef double real_t;
 #else
-//#pragma message "using float"
+// #pragma message "using float"
 typedef float real_t;
 #endif
 
@@ -692,7 +692,7 @@ bool ParseTextureNameAndOption(std::string *texname, texture_option_t *texopt,
 
 namespace tinyobj {
 
-MaterialReader::~MaterialReader() {}
+inline MaterialReader::~MaterialReader() {}
 
 struct vertex_index_t {
   int v_idx, vt_idx, vn_idx;
@@ -1271,8 +1271,9 @@ static vertex_index_t parseRawTriple(const char **token) {
   return vi;
 }
 
-bool ParseTextureNameAndOption(std::string *texname, texture_option_t *texopt,
-                               const char *linebuf) {
+inline bool ParseTextureNameAndOption(std::string *texname,
+                                      texture_option_t *texopt,
+                                      const char *linebuf) {
   // @todo { write more robust lexer and parser. }
   bool found_texname = false;
   std::string texture_name;
@@ -2066,9 +2067,9 @@ static std::string JoinPath(const std::string &dir,
   }
 }
 
-void LoadMtl(std::map<std::string, int> *material_map,
-             std::vector<material_t> *materials, std::istream *inStream,
-             std::string *warning, std::string *err) {
+inline void LoadMtl(std::map<std::string, int> *material_map,
+                    std::vector<material_t> *materials, std::istream *inStream,
+                    std::string *warning, std::string *err) {
   (void)err;
 
   // Create a default material anyway.
@@ -2466,10 +2467,11 @@ void LoadMtl(std::map<std::string, int> *material_map,
   }
 }
 
-bool MaterialFileReader::operator()(const std::string &matId,
-                                    std::vector<material_t> *materials,
-                                    std::map<std::string, int> *matMap,
-                                    std::string *warn, std::string *err) {
+inline bool MaterialFileReader::operator()(const std::string &matId,
+                                           std::vector<material_t> *materials,
+                                           std::map<std::string, int> *matMap,
+                                           std::string *warn,
+                                           std::string *err) {
   if (!m_mtlBaseDir.empty()) {
 #ifdef _WIN32
     char sep = ';';
@@ -2525,10 +2527,11 @@ bool MaterialFileReader::operator()(const std::string &matId,
   }
 }
 
-bool MaterialStreamReader::operator()(const std::string &matId,
-                                      std::vector<material_t> *materials,
-                                      std::map<std::string, int> *matMap,
-                                      std::string *warn, std::string *err) {
+inline bool MaterialStreamReader::operator()(const std::string &matId,
+                                             std::vector<material_t> *materials,
+                                             std::map<std::string, int> *matMap,
+                                             std::string *warn,
+                                             std::string *err) {
   (void)err;
   (void)matId;
   if (!m_inStream) {
@@ -2545,10 +2548,11 @@ bool MaterialStreamReader::operator()(const std::string &matId,
   return true;
 }
 
-bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
-             std::vector<material_t> *materials, std::string *warn,
-             std::string *err, const char *filename, const char *mtl_basedir,
-             bool triangulate, bool default_vcols_fallback) {
+inline bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
+                    std::vector<material_t> *materials, std::string *warn,
+                    std::string *err, const char *filename,
+                    const char *mtl_basedir, bool triangulate,
+                    bool default_vcols_fallback) {
   attrib->vertices.clear();
   attrib->normals.clear();
   attrib->texcoords.clear();
@@ -2581,11 +2585,11 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
                  triangulate, default_vcols_fallback);
 }
 
-bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
-             std::vector<material_t> *materials, std::string *warn,
-             std::string *err, std::istream *inStream,
-             MaterialReader *readMatFn /*= NULL*/, bool triangulate,
-             bool default_vcols_fallback) {
+inline bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
+                    std::vector<material_t> *materials, std::string *warn,
+                    std::string *err, std::istream *inStream,
+                    MaterialReader *readMatFn /*= NULL*/, bool triangulate,
+                    bool default_vcols_fallback) {
   std::stringstream errss;
 
   std::vector<real_t> v;
@@ -3154,11 +3158,12 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
   return true;
 }
 
-bool LoadObjWithCallback(std::istream &inStream, const callback_t &callback,
-                         void *user_data /*= NULL*/,
-                         MaterialReader *readMatFn /*= NULL*/,
-                         std::string *warn, /* = NULL*/
-                         std::string *err /*= NULL*/) {
+inline bool LoadObjWithCallback(std::istream &inStream,
+                                const callback_t &callback,
+                                void *user_data /*= NULL*/,
+                                MaterialReader *readMatFn /*= NULL*/,
+                                std::string *warn, /* = NULL*/
+                                std::string *err /*= NULL*/) {
   std::stringstream errss;
 
   // material
@@ -3450,8 +3455,8 @@ bool LoadObjWithCallback(std::istream &inStream, const callback_t &callback,
   return true;
 }
 
-bool ObjReader::ParseFromFile(const std::string &filename,
-                              const ObjReaderConfig &config) {
+inline bool ObjReader::ParseFromFile(const std::string &filename,
+                                     const ObjReaderConfig &config) {
   std::string mtl_search_path;
 
   if (config.mtl_search_path.empty()) {
@@ -3474,9 +3479,9 @@ bool ObjReader::ParseFromFile(const std::string &filename,
   return valid_;
 }
 
-bool ObjReader::ParseFromString(const std::string &obj_text,
-                                const std::string &mtl_text,
-                                const ObjReaderConfig &config) {
+inline bool ObjReader::ParseFromString(const std::string &obj_text,
+                                       const std::string &mtl_text,
+                                       const ObjReaderConfig &config) {
   std::stringbuf obj_buf(obj_text);
   std::stringbuf mtl_buf(mtl_text);
 

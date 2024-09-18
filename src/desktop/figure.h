@@ -6,8 +6,8 @@
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "../obj/obj.hpp"
-#include "tiny_obj_loader.h"
 #include "point.h"
+#include "tiny_obj_loader.h"
 
 class Figure {
  private:
