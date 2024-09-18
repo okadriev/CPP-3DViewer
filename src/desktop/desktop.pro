@@ -11,20 +11,28 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    figure.cpp \
     main.cpp \
     mainwindow.cpp \
     ../gif/gif.cpp \
-    ../obj/obj.cpp
+    ../obj/obj.cpp \
+    opengl_window.cpp \
+    point.cpp
 
 HEADERS += \
+    figure.h \
     mainwindow.h \
     ../gif/gif.hpp \
-    ../obj/obj.hpp
+    ../obj/obj.hpp \
+    opengl_window.h \
+    point.h \
+    tiny_obj_loader.h
 
 FORMS += \
     mainwindow.ui
 
 LIBS += -lgif
+LIBS += -lGL -lGLU
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
