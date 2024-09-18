@@ -16,9 +16,14 @@ MainWindow::~MainWindow() { delete ui; }
 void MainWindow::on_OpenFileButton_clicked() {
   QString fileName = QFileDialog::getOpenFileName(this, "Открыть файл", "",
                                                   "OBJ files (*.obj)");
-  if (!fileName.isEmpty())
+  if (!fileName.isEmpty()) {
     model_info->filename =
         std::make_unique<std::string>(fileName.toStdString());
+
+    get_figure().parce(model_info->filename.get());
+    model_info->num_vertices = get_figure().points.size() / 3;
+    model_info->num_edges = get_figure().edges.size() / 2;
+  }
   updateInfoLabel();
 }
 
