@@ -3,22 +3,22 @@
 
 #include <QAbstractButton>
 #include <QColorDialog>
+#include <QDateTime>
 #include <QDebug>
 #include <QFileDialog>
+#include <QGuiApplication>
 #include <QMainWindow>
+#include <QPixmap>
+#include <QScreen>
 #include <QScrollBar>
 #include <QWindow>
-#include <QScreen>
-#include <QPixmap>
-#include <QGuiApplication>
-#include <QDateTime>
 
 // #include <iostream>
 #include <filesystem>
 #include <string>
 
-#include "../obj/obj.hpp"
 #include "../gif/gif.hpp"
+#include "../obj/obj.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -32,6 +32,7 @@ class MainWindow : public QMainWindow {
  public:
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
+
 
  private slots:
   void on_OpenFileButton_clicked();
@@ -71,8 +72,10 @@ class MainWindow : public QMainWindow {
   ModelInfo *model_info;
   SettingInfo *setting_info;
   std::unique_ptr<std::string> temp;
+  QOpenGLWidget *openGLWidget;
 
   void setupConnections();
+  void MainWindow::updateOpenGLWidget();
   void updateInfoLabel();
   void printDebugInfo();  ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 };

@@ -5,6 +5,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  openGLWidget = ui->openGLWidget;
   model_info = modelinfo();
   setting_info = settinginfo();
   setWindowTitle("3D Viewer");
@@ -19,6 +20,9 @@ void MainWindow::on_OpenFileButton_clicked() {
   if (!fileName.isEmpty())
     model_info->filename =
         std::make_unique<std::string>(fileName.toStdString());
+
+  model_info.zero_model_info();
+
   updateInfoLabel();
 }
 
@@ -259,6 +263,11 @@ void MainWindow::on_ParallelButton_clicked() {
 void MainWindow::on_CenterButton_clicked() {
   setting_info->projection_type = CENTER;
   updateInfoLabel();
+}
+
+void MainWindow::updateOpenGLWidget() {
+  OlegIdea();  // TODO добавить правильный вызов функции
+  openGLWidget->update();
 }
 
 void MainWindow::updateInfoLabel() {
