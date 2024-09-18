@@ -7,8 +7,6 @@
 #include "model_info.h"
 #include "setting_info.h"
 
-#define SAVE_SETTINHGS "../setting.txt"
-
 // перечисление для типа проекции
 typedef enum { PARALLEL, CENTER } ProjectionType;
 // перечисление для типа отрисовки ребер

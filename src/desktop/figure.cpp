@@ -11,7 +11,7 @@ Figure::Figure() {
   max_z = -__FLT_MAX__;
 }
 
-Figure Figure::parce(char* filename) {
+Figure Figure::parce(std::string &filename) {
   tinyobj::ObjReader reader;
 
   if (!reader.ParseFromFile(filename)) {

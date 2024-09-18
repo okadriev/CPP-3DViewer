@@ -1,10 +1,10 @@
-QT += core gui opengl openglwidgets
+QT += core gui opengl widgets openglwidgets
 
 INCLUDEPATH += $$[QT_INSTALL_HEADERS]
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -15,6 +15,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     ../gif/gif.cpp \
+    ../obj/model_info.cpp \
+    ../obj/setting_info.cpp \
     ../obj/obj.cpp \
     opengl_window.cpp \
     point.cpp
@@ -24,6 +26,8 @@ HEADERS += \
     mainwindow.h \
     ../gif/gif.hpp \
     ../obj/obj.hpp \
+    ../obj/model_info.h \
+    ../obj/setting_info.h \
     opengl_window.h \
     point.h \
     tiny_obj_loader.h

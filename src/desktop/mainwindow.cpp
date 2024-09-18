@@ -21,12 +21,12 @@ void MainWindow::on_OpenFileButton_clicked() {
     model_info->filename =
         std::make_unique<std::string>(fileName.toStdString());
 
-  model_info.zero_model_info();
+  model_info->zero_model_info();
 
   updateInfoLabel();
 }
 
-void MainWindow::on_SaveButton_clicked() { save_settings(); }
+void MainWindow::on_SaveButton_clicked() { setting_info->save_settings(); }
 
 void MainWindow::on_ScreenButton_clicked() {
   QScreen *screen = QGuiApplication::primaryScreen();
@@ -266,7 +266,6 @@ void MainWindow::on_CenterButton_clicked() {
 }
 
 void MainWindow::updateOpenGLWidget() {
-  OlegIdea();  // TODO добавить правильный вызов функции
   openGLWidget->update();
 }
 

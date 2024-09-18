@@ -3,10 +3,10 @@
 OpenGL_window::OpenGL_window(QWidget *parent) : QOpenGLWidget(parent) {
   shader_program = NULL;
 
-  QTimer *timer = new QTimer(this);
-  connect(timer, &QTimer::timeout, this,
-          QOverload<>::of(&QOpenGLWidget::update));
-  timer->start(16);  // 60 fps
+  // QTimer *timer = new QTimer(this);
+  // connect(timer, &QTimer::timeout, this,
+  //         QOverload<>::of(&QOpenGLWidget::update));
+  // timer->start(16);  // 60 fps
 }
 
 void OpenGL_window::initializeGL() {

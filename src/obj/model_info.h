@@ -17,4 +17,6 @@ class ModelInfo {
   int scale;
 };
 
+#include "../desktop/figure.h"
+
 #endif  // MODELINFO_H

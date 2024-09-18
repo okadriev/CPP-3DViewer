@@ -26,7 +26,7 @@ class Figure {
   std::vector<float> points;
   std::vector<int> edges;
   Figure();
-  Figure parce(char *filename);
+  Figure parce(std::string &filename);
   Figure normalize();
 };
 

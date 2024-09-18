@@ -5,7 +5,7 @@
 #include <memory>
 #include <string>
 
-#include "obj.hpp"
+#define SAVE_SETTINHGS "../setting.txt"
 
 class SettingInfo {
  public:

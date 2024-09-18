@@ -75,7 +75,7 @@ class MainWindow : public QMainWindow {
   QOpenGLWidget *openGLWidget;
 
   void setupConnections();
-  void MainWindow::updateOpenGLWidget();
+  void updateOpenGLWidget();
   void updateInfoLabel();
   void printDebugInfo();  ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 };
