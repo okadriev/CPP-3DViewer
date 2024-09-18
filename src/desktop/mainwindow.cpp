@@ -5,11 +5,24 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  openGLWidget = ui->openGLWidget;
+
   model_info = modelinfo();
   setting_info = settinginfo();
   setWindowTitle("3D Viewer");
   ui->MainStackedWidget->setCurrentIndex(I_ONE);
+
+  openGLWidget = ui->openGLWidget;
+  openGLWidget->setAttribute(Qt::WA_OpaquePaintEvent, true);
+  openGLWidget->setAutoFillBackground(false);
+
+  // Подключаем функции OpenGL
+  connect(openGLWidget, &QOpenGLWidget::aboutToCompose, this,
+          &MainWindow::initializeGL);
+  connect(openGLWidget, &QOpenGLWidget::frameSwapped, this,
+          &MainWindow::paintGL);
+  QTimer *timer = new QTimer(this);
+  connect(timer, &QTimer::timeout, this, [this]() { update(); });
+  timer->start(100);  // 10 fps
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -265,9 +278,7 @@ void MainWindow::on_CenterButton_clicked() {
   updateInfoLabel();
 }
 
-void MainWindow::updateOpenGLWidget() {
-  openGLWidget->update();
-}
+void MainWindow::updateOpenGLWidget() { openGLWidget->update(); }
 
 void MainWindow::updateInfoLabel() {
   QString info;
@@ -408,4 +419,25 @@ void MainWindow::printDebugInfo() {
            << (setting_info->vertex_color ? setting_info->vertex_color->c_str()
                                           : "nullptr");
   qDebug() << "  vertex_size:" << setting_info->vertex_size;
+}
+
+void MainWindow::initializeGL() {
+  openGLWidget->makeCurrent();
+  initializeOpenGLFunctions();
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // Чёрный фон
+}
+
+void MainWindow::paintGL() {
+  openGLWidget->makeCurrent();
+  glClear(GL_COLOR_BUFFER_BIT);
+  QColor color = get_color();
+  printf("color: %f %f %f\n", color.redF(), color.greenF(), color.blueF());
+  glClearColor(color.redF(), color.greenF(), color.blueF(), 1.0);
+}
+
+QColor get_color() {
+  SettingInfo *info = settinginfo();
+  return (info->background_color && !info->background_color->empty())
+             ? QColor(QString::fromStdString(*info->background_color))
+             : QColor();
 }

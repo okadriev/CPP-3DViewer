@@ -12,16 +12,16 @@ OpenGL_window::OpenGL_window(QWidget *parent) : QOpenGLWidget(parent) {
 void OpenGL_window::initializeGL() {
   initializeOpenGLFunctions();
 
-  QColor color = get_color();
-  glClearColor(color.redF(), color.greenF(), color.blueF(), 1.0f);
+  //  QColor color = get_color();
+  //  glClearColor(color.redF(), color.greenF(), color.blueF(), 1.0f);
 
   setup_Shaders();
 }
 
 void OpenGL_window::paintGL() {
   glClear(GL_COLOR_BUFFER_BIT);
-  QColor color = get_color();
-  glClearColor(color.redF(), color.greenF(), color.blueF(), 1.0f);
+  //  QColor color = get_color();
+  //  glClearColor(color.redF(), color.greenF(), color.blueF(), 1.0f);
 
   //    SettingInfo *settings = settinginfo();
   Figure fig = get_figure()->normalize();  // нужен ли указатель?
@@ -109,9 +109,9 @@ void OpenGL_window::check_program_link(GLuint program) {
   }
 }
 
-QColor OpenGL_window::get_color() {
-  SettingInfo *info = settinginfo();
-  return (info->background_color && !info->background_color->empty())
-             ? QColor(QString::fromStdString(*info->background_color))
-             : QColor();
-}
+// QColor OpenGL_window::get_color() {
+//   SettingInfo *info = settinginfo();
+//   return (info->background_color && !info->background_color->empty())
+//              ? QColor(QString::fromStdString(*info->background_color))
+//              : QColor();
+// }

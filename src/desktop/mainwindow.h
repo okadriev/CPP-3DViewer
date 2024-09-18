@@ -8,6 +8,9 @@
 #include <QFileDialog>
 #include <QGuiApplication>
 #include <QMainWindow>
+#include <QOpenGLExtraFunctions>
+#include <QOpenGLFunctions>
+#include <QOpenGLWidget>
 #include <QPixmap>
 #include <QScreen>
 #include <QScrollBar>
@@ -26,13 +29,12 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow, protected QOpenGLFunctions {
   Q_OBJECT
 
  public:
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
-
 
  private slots:
   void on_OpenFileButton_clicked();
@@ -78,7 +80,12 @@ class MainWindow : public QMainWindow {
   void updateOpenGLWidget();
   void updateInfoLabel();
   void printDebugInfo();  ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  void initializeGL();
+  void paintGL();
 };
+
+QColor get_color();
 
 typedef enum { I_ONE, I_TWO, I_THREE } IndexType;
 
