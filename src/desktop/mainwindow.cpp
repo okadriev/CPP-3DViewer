@@ -61,13 +61,15 @@ void MainWindow::on_ScreenButton_clicked() {
   }
 }
 
-void MainWindow::on_GifButton_clicked() {
-  QString filename =
-      QFileDialog::getSaveFileName(this, "Save GIF", "", "GIF Files (*.gif)");
-  if (!filename.isEmpty()) {
-    start_record(filename, ui->openGLWidget);
-  }
+void MainWindow::on_GifButton_clicked()
+{
+    QString filename = QFileDialog::getSaveFileName(this, "Save GIF", "", "GIF Files (*.gif)");
+    if (!filename.isEmpty()) {
+        GifRecorder recorder(ui->openGLWidget);
+        recorder.startRecord(filename);
+    }
 }
+
 
 void MainWindow::on_BackgroundColorButton_clicked() {
   QColor color = QColorDialog::getColor();

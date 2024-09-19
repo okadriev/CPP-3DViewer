@@ -1,99 +1,98 @@
 #include "gif.hpp"
-ColorMapObject* get_color_map() {
-  static ColorMapObject color;
-  static GifColorType colors[256] = {0};
-  for (int i = 0; i < 256; i++) {
-    colors[i].Red = colors[i].Green = colors[i].Blue = (i * 255) / 255;
-  }
-  color.ColorCount = 256;
-  color.Colors = colors;
-  return &color;
-}
+#include <QThread>
 
-void start_record(const QString& filename, QOpenGLWidget* openGLWidget) {
-  int error = 0;
-  GifFileType* gif =
-      EGifOpenFileName(filename.toUtf8().constData(), false, &error);
-  if (gif) {
-    EGifSetGifVersion(gif, true);
-    int width = openGLWidget->width();
-    int height = openGLWidget->height();
+GifRecorder::GifRecorder(QOpenGLWidget* openGLWidget)
+    : m_openGLWidget(openGLWidget), m_gif(nullptr), m_error(0), m_frameCount(0) {}
 
-    ColorMapObject* color_map = get_color_map();
-    EGifPutScreenDesc(gif, width, height, 8, 0, color_map);
-
-    UserData* data = new UserData{gif, &error, 0, openGLWidget};
-    QTimer* timer = new QTimer();
-    QObject::connect(timer, &QTimer::timeout, [data, timer]() {
-      if (!record_screencast_loop(data)) {
-        timer->stop();
-        timer->deleteLater();
-        delete data;
-      }
-    });
-    timer->start(FRAME_DELAY);
-  }
-}
-
-bool record_screencast_loop(UserData* data) {
-  QPixmap pixmap = data->openGLWidget->grab();
-  QImage image = pixmap.toImage();
-  record_frame(data->gif, &image);
-
-  data->frame_count++;
-  if (data->frame_count >= DURATION / FRAME_DELAY) {
-    if (data->gif) {
-      EGifCloseFile(data->gif, data->error);
-      QMessageBox::information(nullptr, "Уведомление", "Запись завершена");
+GifRecorder::~GifRecorder() {
+    if (m_gif) {
+        EGifCloseFile(m_gif, &m_error);
     }
-    return false;
-  }
-  return true;
 }
 
-void initialize_color_buffers(const QImage* image, GifByteType** red,
-                              GifByteType** green, GifByteType** blue) {
-  int width = image->width();
-  int height = image->height();
+void GifRecorder::startRecord(const QString& filename) {
+    m_gif = EGifOpenFileName(filename.toUtf8().constData(), false, &m_error);
+    if (m_gif) {
+        EGifSetGifVersion(m_gif, true);
+        int width = m_openGLWidget->width();
+        int height = m_openGLWidget->height();
 
-  *red = (GifByteType*)malloc(width * height);
-  *green = (GifByteType*)malloc(width * height);
-  *blue = (GifByteType*)malloc(width * height);
+        ColorMapObject* colorMap = getColorMap();
+        EGifPutScreenDesc(m_gif, width, height, 8, 0, colorMap);
 
-  for (int y = 0; y < height; y++) {
-    for (int x = 0; x < width; x++) {
-      QColor color = image->pixelColor(x, y);
-      int buffer_offset = y * width + x;
-      (*red)[buffer_offset] = color.red();
-      (*green)[buffer_offset] = color.green();
-      (*blue)[buffer_offset] = color.blue();
+        while (recordFrame()) {
+            QThread::msleep(FRAME_DELAY);
+        }
+
+        EGifCloseFile(m_gif, &m_error);
+        m_gif = nullptr;
+        QMessageBox::information(nullptr, "Уведомление", "Запись завершена");
     }
-  }
 }
 
-void record_frame(GifFileType* gif, const QImage* image) {
-  int width = image->width();
-  int height = image->height();
+ColorMapObject* GifRecorder::getColorMap() {
+    static ColorMapObject color;
+    static GifColorType colors[256] = {0};
+    for (int i = 0; i < 256; i++) {
+        colors[i].Red = colors[i].Green = colors[i].Blue = (i * 255) / 255;
+    }
+    color.ColorCount = 256;
+    color.Colors = colors;
+    return &color;
+}
 
-  GifByteType *red, *green, *blue;
-  initialize_color_buffers(image, &red, &green, &blue);
+bool GifRecorder::recordFrame() {
+    QPixmap pixmap = m_openGLWidget->grab();
+    QImage image = pixmap.toImage();
+    recordFrameToGif(&image);
 
-  GifByteType* output_buffer = (GifByteType*)malloc(width * height);
-  ColorMapObject* color_map = GifMakeMapObject(256, NULL);
+    m_frameCount++;
+    return m_frameCount < DURATION / FRAME_DELAY;
+}
 
-  if (output_buffer && color_map) {
-    int color_map_size = 256;
-    GifQuantizeBuffer(width, height, &color_map_size, red, green, blue,
-                      output_buffer, color_map->Colors);
+void GifRecorder::initializeColorBuffers(const QImage* image, GifByteType** red,
+                                         GifByteType** green, GifByteType** blue) {
+    int width = image->width();
+    int height = image->height();
 
-    EGifPutImageDesc(gif, 0, 0, width, height, false, color_map);
-    EGifPutLine(gif, output_buffer, width * height);
+    *red = (GifByteType*)malloc(width * height);
+    *green = (GifByteType*)malloc(width * height);
+    *blue = (GifByteType*)malloc(width * height);
 
-    free(output_buffer);
-    GifFreeMapObject(color_map);
-  }
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            QColor color = image->pixelColor(x, y);
+            int bufferOffset = y * width + x;
+            (*red)[bufferOffset] = color.red();
+            (*green)[bufferOffset] = color.green();
+            (*blue)[bufferOffset] = color.blue();
+        }
+    }
+}
 
-  free(red);
-  free(green);
-  free(blue);
+void GifRecorder::recordFrameToGif(const QImage* image) {
+    int width = image->width();
+    int height = image->height();
+
+    GifByteType *red, *green, *blue;
+    initializeColorBuffers(image, &red, &green, &blue);
+
+    GifByteType* outputBuffer = (GifByteType*)malloc(width * height);
+    ColorMapObject* colorMap = GifMakeMapObject(256, NULL);
+
+    if (outputBuffer && colorMap) {
+        int colorMapSize = 256;
+        GifQuantizeBuffer(width, height, &colorMapSize, red, green, blue,
+                          outputBuffer, colorMap->Colors);
+
+        EGifPutImageDesc(m_gif, 0, 0, width, height, false, colorMap);
+        EGifPutLine(m_gif, outputBuffer, width * height);
+
+        free(outputBuffer);
+        GifFreeMapObject(colorMap);
+    }
+
+    free(red);
+    free(green);
+    free(blue);
 }
