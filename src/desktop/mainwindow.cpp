@@ -20,9 +20,9 @@ MainWindow::MainWindow(QWidget *parent)
           &MainWindow::initializeGL);
   connect(openGLWidget, &QOpenGLWidget::frameSwapped, this,
           &MainWindow::paintGL);
-  QTimer *timer = new QTimer(this);
-  connect(timer, &QTimer::timeout, this, [this]() { update(); });
-  timer->start(100);  // 10 fps
+  // QTimer *timer = new QTimer(this);
+  // connect(timer, &QTimer::timeout, this, [this]() { update(); });
+  // timer->start(100);  // 10 fps
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -429,10 +429,9 @@ void MainWindow::initializeGL() {
 
 void MainWindow::paintGL() {
   openGLWidget->makeCurrent();
-  glClear(GL_COLOR_BUFFER_BIT);
   QColor color = get_color();
-  printf("color: %f %f %f\n", color.redF(), color.greenF(), color.blueF());
   glClearColor(color.redF(), color.greenF(), color.blueF(), 1.0);
+  glClear(GL_COLOR_BUFFER_BIT);
 }
 
 QColor get_color() {
