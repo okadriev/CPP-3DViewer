@@ -22,6 +22,7 @@
 
 #include "../gif/gif.hpp"
 #include "../obj/obj.hpp"
+#include "opengl_window.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

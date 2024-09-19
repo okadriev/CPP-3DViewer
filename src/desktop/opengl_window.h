@@ -2,24 +2,25 @@
 #define OPENGL_WINDOW_H
 
 #include <QOpenGLExtraFunctions>
-#include <QOpenGLFunctions>
+#include <QOpenGLFunctions>  // не нужен
 #include <QOpenGLWidget>
-#include <QTimer>
+#include <QTimer>  // не нужен
 #include <QWidget>
 
 #include "../obj/obj.hpp"
 #include "figure.h"
 
-class OpenGL_window : public QOpenGLWidget, protected QOpenGLExtraFunctions {
+class OpenGLwindow : public QOpenGLWidget, protected QOpenGLExtraFunctions {
+  Q_OBJECT
  public:
-  OpenGL_window(QWidget *parent);
+  explicit OpenGLwindow(QWidget *parent = nullptr);
+
+  void initializeGL();
+  void paintGL();
 
  private:
   GLuint *shader_program;
-  //    Figure fig;
 
-  void paintGL();
-  void initializeGL();
   // void resizeGL(int w, int h);
 
   void setup_Shaders();
