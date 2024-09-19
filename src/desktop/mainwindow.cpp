@@ -20,9 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
           &MainWindow::initializeGL);
   connect(openGLWidget, &QOpenGLWidget::frameSwapped, this,
           &MainWindow::paintGL);
-  // QTimer *timer = new QTimer(this);
-  // connect(timer, &QTimer::timeout, this, [this]() { update(); });
-  // timer->start(100);  // 10 fps
 }
 
 MainWindow::~MainWindow() { delete ui; }

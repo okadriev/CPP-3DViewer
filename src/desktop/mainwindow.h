@@ -76,6 +76,7 @@ class MainWindow : public QMainWindow, protected QOpenGLFunctions {
   SettingInfo *setting_info;
   std::unique_ptr<std::string> temp;
   QOpenGLWidget *openGLWidget;
+  // MyOpenGLwindow *openGLWidget;
 
   void setupConnections();
   void updateOpenGLWidget();
