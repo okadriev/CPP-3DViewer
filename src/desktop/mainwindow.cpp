@@ -237,12 +237,12 @@ void MainWindow::on_VertexLineEdit_textChanged(const QString &text) {
 }
 
 void MainWindow::on_ParallelButton_clicked() {
-  controller.controller.update_model_info(PARALLEL);
+  controller.controller.update_model_info(V_PARALLEL);
   updateInfoLabel();
 }
 
 void MainWindow::on_CenterButton_clicked() {
-  controller.controller.update_model_info(CENTER);
+  controller.controller.update_model_info(V_CENTER);
   updateInfoLabel();
 }
 

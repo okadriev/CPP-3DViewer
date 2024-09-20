@@ -16,8 +16,6 @@
 #include <string>
 
 #include "../controller/controller.h"
-#include "../gif/gif.hpp"
-#include "../obj/obj.hpp"
 #include "myopenglrenderer.h"
 
 QT_BEGIN_NAMESPACE
@@ -82,5 +80,7 @@ class MainWindow : public QMainWindow {
 };
 
 typedef enum { I_ONE, I_TWO, I_THREE } IndexType;
+// перечисление для типа проекции
+typedef enum { V_PARALLEL, V_CENTER } ProjectType;
 
 #endif  // MAINWINDOW_H
