@@ -11,6 +11,13 @@ Figure::Figure() {
   max_z = -__FLT_MAX__;
 }
 
+Figure::~Figure() {
+  points_file.clear();
+  edges_file.clear();
+  points.clear();
+  edges.clear();
+}
+
 Figure Figure::parce(std::string& filename) {
   tinyobj::ObjReader reader;
   tinyobj::ObjReaderConfig config;
@@ -46,6 +53,7 @@ Figure Figure::parce(std::string& filename) {
     max_z = std::max(max_z, points_file[i + 2]);
   }
 
+  edges_file.clear();
   for (const auto& shape : shapes) {
     for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); f++) {
       size_t fv = shape.mesh.num_face_vertices[f];
@@ -86,13 +94,13 @@ Figure Figure::normalize() {
   for (size_t i = 0; i < points.size(); i += 3) {
     Point point = {points[i], points[i + 1], points[i + 2]};
 
-    point.move((info->trans_x - 50.0) / 30 / scale - x_center,
-               (info->trans_y - 50.0) / 30 / scale - y_center,
-               (info->trans_z - 50.0) / 30 / scale - z_center);
     // point.rotate(info->rotate_x, info->rotate_y, info->rotate_z);
     point.rotateX(info->rotate_x);
     point.rotateY(info->rotate_y);
     point.rotateZ(info->rotate_z);
+    point.move((info->trans_x - 50.0) / 30 / scale - x_center,
+               (info->trans_y - 50.0) / 30 / scale - y_center,
+               (info->trans_z - 50.0) / 30 / scale - z_center);
     point.scale(scale);
 
     points[i] = point.x;

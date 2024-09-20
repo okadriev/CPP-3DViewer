@@ -1,9 +1,9 @@
 #ifndef FIGURE_H
 #define FIGURE_H
 
+#include <QDebug>  // убрать
 #include <iostream>
 #include <vector>
-#include <QDebug> // убрать
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "../obj/obj.hpp"
@@ -14,6 +14,7 @@ class Figure {
  private:
   std::vector<float> points_file;
   std::vector<int> edges_file;
+
   int count_points;
   int count_edges;
   float min_x;
@@ -26,7 +27,10 @@ class Figure {
  public:
   std::vector<float> points;
   std::vector<int> edges;
+
   Figure();
+  ~Figure();
+
   Figure parce(std::string &filename);
   Figure normalize();
 };
