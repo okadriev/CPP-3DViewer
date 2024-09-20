@@ -24,7 +24,7 @@ class Controller {
 
  private:
   ModelInfo *model_info;
-  SettingInfo *SettingInfo;
+  SettingInfo *setting_info;
 };
 
 #endif  // CONTROLLER_H
