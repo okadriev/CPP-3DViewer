@@ -1,30 +1,33 @@
-#include "opengl_window.h"
+#include "myopenglrenderer.h"
 
-OpenGL_window::OpenGL_window(QWidget *parent) : QOpenGLWidget(parent) {
-  shader_program = NULL;
-
-  // QTimer *timer = new QTimer(this);
-  // connect(timer, &QTimer::timeout, this,
-  //         QOverload<>::of(&QOpenGLWidget::update));
-  // timer->start(16);  // 60 fps
+MyOpenGLRenderer::MyOpenGLRenderer(QOpenGLWidget *glWidget, QObject *parent)
+    : QObject(parent), m_glWidget(glWidget) {
+  shader_program = new GLuint;
 }
 
-void OpenGL_window::initializeGL() {
+void MyOpenGLRenderer::initializeGL() {
+  // qDebug() << "MyOpenGLRenderer::initializeGL called";
+
+  m_glWidget->makeCurrent();
   initializeOpenGLFunctions();
 
-  QColor color = get_color();
-  glClearColor(color.redF(), color.greenF(), color.blueF(), 1.0f);
-
   setup_Shaders();
-}
 
-void OpenGL_window::paintGL() {
-  glClear(GL_COLOR_BUFFER_BIT);
+  // glClear(GL_COLOR_BUFFER_BIT);
+
   QColor color = get_color();
-  glClearColor(color.redF(), color.greenF(), color.blueF(), 1.0f);
+  glClearColor(color.redF(), color.greenF(), color.blueF(), 1.0);
+  // qDebug() << "MyOpenGLRenderer::paintGL called";
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  //    SettingInfo *settings = settinginfo();
+  // SettingInfo *settings = settinginfo();
   Figure fig = get_figure()->normalize();  // нужен ли указатель?
+  // qDebug() << "edges ";
+  // for (size_t i = 0; i < fig.edges.size(); i++)
+  //   qDebug() << fig.edges.data()[i] << " ";
+
+  // qDebug() << "points ";
+  // for (size_t i = 0; i < fig.points.size(); i++) qDebug() << fig.points[i];
 
   GLuint VBO, VAO, EdgeEBO;
   glGenVertexArrays(1, &VAO);
@@ -48,9 +51,21 @@ void OpenGL_window::paintGL() {
   glDeleteVertexArrays(1, &VAO);
 }
 
-// void OpenGL_window::resizeGL(int w, int h) {}
+void MyOpenGLRenderer::paintGL() {}
 
-void OpenGL_window::setup_Shaders() {
+// void MyOpenGLRenderer::resizeGL(int w, int h) {
+//   glViewport(0, 0, w, h);
+//   // Дополнительный код для обработки изменения размера
+// }
+
+QColor MyOpenGLRenderer::get_color() {
+  SettingInfo *info = settinginfo();
+  return (info->background_color && !info->background_color->empty())
+             ? QColor(QString::fromStdString(*info->background_color))
+             : QColor();
+}
+
+void MyOpenGLRenderer::setup_Shaders() {
   const char *vertex_shader_src =
       "#version 420 core\n"
       "layout(location = 0) in vec3 pos;\n"
@@ -85,8 +100,8 @@ void OpenGL_window::setup_Shaders() {
   glDeleteShader(fragment_shader);
 }
 
-void OpenGL_window::check_shader_compile(GLuint shader,
-                                         const char *shader_type) {
+void MyOpenGLRenderer::check_shader_compile(GLuint shader,
+                                            const char *shader_type) {
   GLint success;
   GLchar infoLog[512];
   glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -98,7 +113,7 @@ void OpenGL_window::check_shader_compile(GLuint shader,
   }
 }
 
-void OpenGL_window::check_program_link(GLuint program) {
+void MyOpenGLRenderer::check_program_link(GLuint program) {
   GLint success;
   GLchar infoLog[512];
   glGetProgramiv(program, GL_LINK_STATUS, &success);
@@ -107,11 +122,4 @@ void OpenGL_window::check_program_link(GLuint program) {
     qCritical() << "ERROR::PROGRAM::LINKING_FAILED\n" << infoLog;
     throw std::runtime_error("Program linking failed");
   }
-}
-
-QColor OpenGL_window::get_color() {
-  SettingInfo *info = settinginfo();
-  return (info->background_color && !info->background_color->empty())
-             ? QColor(QString::fromStdString(*info->background_color))
-             : QColor();
 }

@@ -1,27 +1,29 @@
 #pragma once
 
 #include <gif_lib.h>
-
-#include <QBuffer>
 #include <QImage>
-#include <QMessageBox>
 #include <QOpenGLWidget>
-#include <QPixmap>
-#include <QTimer>
+#include <QMessageBox>
 
 #define FRAME_DELAY 100
 #define DURATION 5000
 
-struct UserData {
-  GifFileType* gif;
-  int* error;
-  int frame_count;
-  QOpenGLWidget* openGLWidget;
-};
+class GifRecorder {
+public:
+    GifRecorder(QOpenGLWidget* openGLWidget);
+    ~GifRecorder();
 
-ColorMapObject* get_color_map();
-void start_record(const QString& filename, QOpenGLWidget* openGLWidget);
-bool record_screencast_loop(UserData* data);
-void initialize_color_buffers(const QImage* image, GifByteType** red,
-                              GifByteType** green, GifByteType** blue);
-void record_frame(GifFileType* gif, const QImage* image);
+    void startRecord(const QString& filename);
+
+private:
+    QOpenGLWidget* m_openGLWidget;
+    GifFileType* m_gif;
+    int m_error;
+    int m_frameCount;
+
+    ColorMapObject* getColorMap();
+    bool recordFrame();
+    void initializeColorBuffers(const QImage* image, GifByteType** red,
+                                GifByteType** green, GifByteType** blue);
+    void recordFrameToGif(const QImage* image);
+};

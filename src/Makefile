@@ -16,32 +16,42 @@ CFLAGS = -Wall -Wextra -Werror -std=c17 -g
 MAIN_SRC= $(wildcard 3D_Viewer_2.0.cpp )
 MAIN_OBJ= $(patsubst %.c,%.o,$(MAIN_SRC))
 
-DSK_SRC= $(wildcard ./desktop/*.cpp )
-DSK_OBJ= $(patsubst %.c,%.o,$(DSK_SRC))
-DSK_LIB = desktop.a
+VIEW_SRC= $(wildcard ./desktop/*.cpp )
+VIEW_OBJ= $(patsubst %.c,%.o,$(VIEW_SRC))
+VIEW_LIB = view.a
 
-VWR_SRC = $(wildcard ./viewer/*/*.cpp )
-VWR_OBJ = $(SCREEN_SRC:.cpp=.o)
-VWR_LIB = viewer.a
+CNTRL_SRC= $(wildcard ./controller/*.cpp )
+CNTRL_OBJ= $(patsubst %.c,%.o,$(CNTRL_SRC))
+CNTRL_LIB = controller.a
+
+MODEL_SRC = $(wildcard ./viewer/*/*.cpp )
+MODEL_OBJ = $(SCREEN_SRC:.cpp=.o)
+MODEL_LIB = model.a
 
 BUILD_DIR = build 																					 ##### ДОБАВИТЬ В QMAKE ЧТОБЫ УСТАНАВЛИВАЛОСЬ СЮДА
 EXEC = 3D_Viewer_2.0 																				 #### ДОБАВИТЬ В QMAKE ЧТОБЫ УСТАНАВЛИВАЛОСЬ СЮДА
 
 all: install run
 
-$(DSK_LIB): $(DSK_OBJ)
-	@ar rcs $(DSK_LIB) $(DSK_OBJ) $(DSK_OBJ)
-	@ranlib $(DSK_LIB)
-	@rm -f $(DSK_OBJ) 
-.PHONY: $(DSK_LIB)
+$(VIEW_LIB): $(VIEW_OBJ)
+	@ar rcs $(VIEW_LIB) $(VIEW_OBJ) 
+	@ranlib $(VIEW_LIB)
+	@rm -f $(VIEW_OBJ) 
+.PHONY: $(VIEW_LIB)
 
-$(VWR_LIB): $(VWR_OBJ) 
-	@ar rcs $(VWR_LIB) $(VWR_OBJ) $(VWR_OBJ)
-	@ranlib $(VWR_LIB)
-	@rm -f $(VWR_OBJ) 
-.PHONY: $(VWR_LIB)
+$(CNTRL_LIB): $(CNTRL_OBJ)
+	@ar rcs $(CNTRL_LIB) $(CNTRL_OBJ) 
+	@ranlib $(CNTRL_LIB)
+	@rm -f $(CNTRL_OBJ) 
+.PHONY: $(CNTRL_LIB)
 
-install: clear clean $(DSK_LIB) $(VWR_LIB)
+$(MODEL_LIB): $(MODEL_OBJ) 
+	@ar rcs $(MODEL_LIB) $(MODEL_OBJ) 
+	@ranlib $(MODEL_LIB)
+	@rm -f $(MODEL_OBJ) 
+.PHONY: $(MODEL_LIB)
+
+install: clear clean $(VIEW_LIB) $(CNTRL_LIB) $(MODEL_LIB)
 	@cd desktop && qmake && make        #####ПУСТЬ QMAKE СОБИРАЕТ ИЗ БИБЛИОТЕК VIEWER.A И DESKTOP.A И MAIN.C
 	@./$(BUILD_DIR)/$(EXEC) $(PARAM)
 .PHONY: install
@@ -87,12 +97,12 @@ leak_check: clear
 .PHONY: leak_check
 
 cpp_check: clear
-	@cppcheck --enable=all --suppress=missingIncludeSystem --language=c++ $(TEST_SRS) $(DSK_SRC) $(VWR_SRC) $(MAIN_SRC)
+	@cppcheck --enable=all --suppress=missingIncludeSystem --language=c++ $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC)
 .PHONY: cpp_check
 
 clang_check: clear
 	@cp ../materials/linters/.clang-format .
-	@clang-format -n $(TEST_SRS) $(DSK_SRC) $(VWR_SRC) $(MAIN_SRC)
+	@clang-format -n $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC)
 .PHONY: clang_check
 
 clear:
@@ -101,8 +111,8 @@ clear:
 
 clean:
 	@rm -f $(TEST_OBJ) $(TEST_EXEC)
-	@rm -rf $(BUILD_DIR) latex html
-	@rm -f $(DSK_LIB) $(VWR_LIB)
+	@rm -rf $(BUILD_DIR) latex html */*.o
+	@rm -f $(VIEW_LIB) $(MODEL_LIB)
 	@rm -rf coverage_report gcov_r Doxyfile README.md
 .PHONY: clean
 
