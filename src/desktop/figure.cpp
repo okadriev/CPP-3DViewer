@@ -29,15 +29,20 @@ Figure Figure::parce(std::string& filename) {
     exit(1);
   }
 
-  if (!reader.Warning().empty()) {
-    std::cout << "TinyObjReader: " << reader.Warning();
-  }
-
   auto& attrib = reader.GetAttrib();
   auto& shapes = reader.GetShapes();
 
   points_file = attrib.vertices;
+  find_min_max_vertices();
+  convert_shapes_to_edges(shapes);
 
+  points = std::vector<float>(points_file);
+  edges = std::vector<int>(edges_file);
+
+  return *this;
+}
+
+void Figure::find_min_max_vertices() {
   min_x = points_file[0];
   min_y = points_file[1];
   min_z = points_file[2];
@@ -52,24 +57,26 @@ Figure Figure::parce(std::string& filename) {
     max_y = std::max(max_y, points_file[i + 1]);
     max_z = std::max(max_z, points_file[i + 2]);
   }
+}
 
+void Figure::convert_shapes_to_edges(
+    const std::vector<tinyobj::shape_t>& shapes) {
   edges_file.clear();
   for (const auto& shape : shapes) {
+    size_t index = 0;
     for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); f++) {
       size_t fv = shape.mesh.num_face_vertices[f];
-      for (size_t v = 0; v < fv; v++) {
-        tinyobj::index_t idx = shape.mesh.indices[f * fv + v];
-        tinyobj::index_t idx_next = shape.mesh.indices[f * fv + (v + 1) % fv];
+      tinyobj::index_t first, idx, idx_next;
+      for (size_t i = 0; i < fv; i++, index++) {
+        if (i == 0) first = shape.mesh.indices[index];
+
+        idx = shape.mesh.indices[index];
+        idx_next = ((i != fv - 1) ? shape.mesh.indices[index + 1] : first);
         edges_file.push_back(idx.vertex_index);
         edges_file.push_back(idx_next.vertex_index);
       }
     }
   }
-
-  points = std::vector<float>(points_file);
-  edges = std::vector<int>(edges_file);
-
-  return *this;
 }
 
 Figure Figure::normalize() {
@@ -92,15 +99,16 @@ Figure Figure::normalize() {
   scale /= (x > y) ? ((x > z) ? x : z) : ((y > z) ? y : z);
 
   for (size_t i = 0; i < points.size(); i += 3) {
-    Point point = {points[i], points[i + 1], points[i + 2]};
+    Point point = {points[i] - x_center, points[i + 1] - y_center,
+                   points[i + 2] - z_center};
 
     // point.rotate(info->rotate_x, info->rotate_y, info->rotate_z);
     point.rotateX(info->rotate_x);
     point.rotateY(info->rotate_y);
     point.rotateZ(info->rotate_z);
-    point.move((info->trans_x - 50.0) / 30 / scale - x_center,
-               (info->trans_y - 50.0) / 30 / scale - y_center,
-               (info->trans_z - 50.0) / 30 / scale - z_center);
+    point.move((info->trans_x - 50.0) / 30 / scale,
+               (info->trans_y - 50.0) / 30 / scale,
+               (info->trans_z - 50.0) / 30 / scale);
     point.scale(scale);
 
     points[i] = point.x;

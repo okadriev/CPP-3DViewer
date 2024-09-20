@@ -31,6 +31,8 @@ class Figure {
   Figure();
   ~Figure();
 
+  void find_min_max_vertices();
+  void convert_shapes_to_edges(const std::vector<tinyobj::shape_t> &shapes);
   Figure parce(std::string &filename);
   Figure normalize();
 };
