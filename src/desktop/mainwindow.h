@@ -4,25 +4,20 @@
 #include <QAbstractButton>
 #include <QColorDialog>
 #include <QDateTime>
-#include <QDebug>
+#include <QDebug>  // убрать
 #include <QFileDialog>
 #include <QGuiApplication>
 #include <QMainWindow>
-#include <QOpenGLExtraFunctions>
-#include <QOpenGLFunctions>
-#include <QOpenGLWidget>
 #include <QPixmap>
 #include <QScreen>
 #include <QScrollBar>
 #include <QWindow>
-
-// #include <iostream>
 #include <filesystem>
 #include <string>
 
 #include "../gif/gif.hpp"
 #include "../obj/obj.hpp"
-#include "opengl_window.h"
+#include "myopenglrenderer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -30,7 +25,7 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow, protected QOpenGLFunctions {
+class MainWindow : public QMainWindow {
   Q_OBJECT
 
  public:
@@ -76,18 +71,15 @@ class MainWindow : public QMainWindow, protected QOpenGLFunctions {
   SettingInfo *setting_info;
   std::unique_ptr<std::string> temp;
   QOpenGLWidget *openGLWidget;
-  // MyOpenGLwindow *openGLWidget;
+  MyOpenGLRenderer *m_renderer;
+
+  void setupOpenGL();
 
   void setupConnections();
   void updateOpenGLWidget();
   void updateInfoLabel();
   void printDebugInfo();  ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  void initializeGL();
-  void paintGL();
 };
-
-QColor get_color();
 
 typedef enum { I_ONE, I_TWO, I_THREE } IndexType;
 

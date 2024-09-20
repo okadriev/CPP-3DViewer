@@ -18,7 +18,7 @@ SOURCES += \
     ../obj/model_info.cpp \
     ../obj/setting_info.cpp \
     ../obj/obj.cpp \
-    opengl_window.cpp \
+    myopenglrenderer.cpp \
     point.cpp
 
 HEADERS += \
@@ -28,7 +28,7 @@ HEADERS += \
     ../obj/obj.hpp \
     ../obj/model_info.h \
     ../obj/setting_info.h \
-    opengl_window.h \
+    myopenglrenderer.h \
     point.h \
     tiny_obj_loader.h
 

@@ -19,4 +19,6 @@ clean:
 	@rm -rf desktop/.qmake* desktop/*.user desktop/moc_* desktop/*.o
 	@rm -rf desktop/Makefile* desktop/ui_mainwindow.h
 
+rebuild: clean uninstall all
+
 # для гиф:

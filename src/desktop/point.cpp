@@ -5,6 +5,7 @@ Point Point::rotate(float angle_x, float angle_y, float angle_z) {
 }
 
 Point Point::rotateX(float angle) {
+  angle -= 180;
   float rad = angle * M_PI / 180.0;
   float cos_a = cos(rad), sin_a = sin(rad);
   x = x;
@@ -15,6 +16,7 @@ Point Point::rotateX(float angle) {
 }
 
 Point Point::rotateY(float angle) {
+  angle -= 180;
   float rad = angle * M_PI / 180.0;
   float cos_a = cos(rad), sin_a = sin(rad);
   x = x * cos_a + z * sin_a;
@@ -25,6 +27,7 @@ Point Point::rotateY(float angle) {
 }
 
 Point Point::rotateZ(float angle) {
+  angle -= 180;
   float rad = angle * M_PI / 180.0;
   float cos_a = cos(rad), sin_a = sin(rad);
   x = x * cos_a - y * sin_a;
@@ -43,7 +46,6 @@ Point Point::move(float dx, float dy, float dz) {
 }
 
 Point Point::scale(float factor) {
-  if (factor == 0.0) factor = 1.0;
   x *= factor;
   y *= factor;
   z *= factor;

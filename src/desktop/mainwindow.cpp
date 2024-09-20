@@ -3,6 +3,7 @@
 #include "./ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
+
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
 
@@ -11,15 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
   setWindowTitle("3D Viewer");
   ui->MainStackedWidget->setCurrentIndex(I_ONE);
 
-  openGLWidget = ui->openGLWidget;
-  openGLWidget->setAttribute(Qt::WA_OpaquePaintEvent, true);
-  openGLWidget->setAutoFillBackground(false);
-
-  // Подключаем функции OpenGL
-  connect(openGLWidget, &QOpenGLWidget::aboutToCompose, this,
-          &MainWindow::initializeGL);
-  connect(openGLWidget, &QOpenGLWidget::frameSwapped, this,
-          &MainWindow::paintGL);
+  setupOpenGL();
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -275,7 +268,11 @@ void MainWindow::on_CenterButton_clicked() {
   updateInfoLabel();
 }
 
-void MainWindow::updateOpenGLWidget() { openGLWidget->update(); }
+void MainWindow::updateOpenGLWidget() {
+  qDebug() << "updateOpenGLWidget1";
+  openGLWidget->update();
+  qDebug() << "updateOpenGLWidget2";
+}
 
 void MainWindow::updateInfoLabel() {
   QString info;
@@ -418,22 +415,16 @@ void MainWindow::printDebugInfo() {
   qDebug() << "  vertex_size:" << setting_info->vertex_size;
 }
 
-void MainWindow::initializeGL() {
-  openGLWidget->makeCurrent();
-  initializeOpenGLFunctions();
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // Чёрный фон
-}
+void MainWindow::setupOpenGL() {
+  openGLWidget = ui->openGLWidget;
 
-void MainWindow::paintGL() {
-  openGLWidget->makeCurrent();
-  QColor color = get_color();
-  glClearColor(color.redF(), color.greenF(), color.blueF(), 1.0);
-  glClear(GL_COLOR_BUFFER_BIT);
-}
-
-QColor get_color() {
-  SettingInfo *info = settinginfo();
-  return (info->background_color && !info->background_color->empty())
-             ? QColor(QString::fromStdString(*info->background_color))
-             : QColor();
+  if (openGLWidget) {
+    m_renderer = new MyOpenGLRenderer(openGLWidget, this);
+    connect(openGLWidget, &QOpenGLWidget::aboutToCompose, m_renderer,
+            &MyOpenGLRenderer::initializeGL);
+    connect(openGLWidget, &QOpenGLWidget::frameSwapped, m_renderer,
+            &MyOpenGLRenderer::paintGL);
+    // connect(openGLWidget, &QOpenGLWidget::resized, m_renderer,
+    //         &MyOpenGLRenderer::resizeGL);
+  }
 }
