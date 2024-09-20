@@ -1,7 +1,8 @@
-all: clean install run
+all: install run
 # clear && cd desktop && rm -rf build && mkdir build && cd build && cmake .. && cmake --build . && ./viewer -platform xcb && cd ../..
 
 install:
+	@clear
 # убрать "DEFINES+=" если будут не нужны
 	@cd desktop && qmake "DEFINES+=" desktop.pro -o Makefile.viewer 
 	@$(MAKE) -C desktop -f Makefile.viewer 
@@ -14,8 +15,10 @@ uninstall:
 	@rm -rf 3Dviewer
 
 clean:
-	@rm -rf build-* 
+	@rm -rf build-* desktop/desktop
 	@rm -rf desktop/.qmake* desktop/*.user desktop/moc_* desktop/*.o
 	@rm -rf desktop/Makefile* desktop/ui_mainwindow.h
+
+rebuild: clean uninstall all
 
 # для гиф:

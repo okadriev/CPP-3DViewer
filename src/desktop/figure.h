@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <QDebug> // убрать
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "../obj/obj.hpp"
