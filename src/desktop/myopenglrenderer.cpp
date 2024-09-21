@@ -17,17 +17,10 @@ void MyOpenGLRenderer::initializeGL() {
 
   QColor color = get_color();
   glClearColor(color.redF(), color.greenF(), color.blueF(), 1.0);
-  // qDebug() << "MyOpenGLRenderer::paintGL called";
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // SettingInfo *settings = settinginfo();
   Figure fig = get_figure()->normalize();  // нужен ли указатель?
-  // qDebug() << "edges ";
-  // for (size_t i = 0; i < fig.edges.size(); i++)
-  //   qDebug() << fig.edges.data()[i] << " ";
-
-  // qDebug() << "points ";
-  // for (size_t i = 0; i < fig.points.size(); i++) qDebug() << fig.points[i];
 
   GLuint VBO, VAO, EdgeEBO;
   glGenVertexArrays(1, &VAO);
@@ -51,7 +44,9 @@ void MyOpenGLRenderer::initializeGL() {
   glDeleteVertexArrays(1, &VAO);
 }
 
-void MyOpenGLRenderer::paintGL() {}
+void MyOpenGLRenderer::paintGL() {
+  // qDebug() << "MyOpenGLRenderer::paintGL called";
+  }
 
 // void MyOpenGLRenderer::resizeGL(int w, int h) {
 //   glViewport(0, 0, w, h);
