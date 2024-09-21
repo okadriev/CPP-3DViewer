@@ -28,9 +28,9 @@ class MyOpenGLRenderer : public QObject, protected QOpenGLFunctions {
   GLuint *shader_program;
 
   QColor get_color();
-  void setup_Shaders();
-  void check_shader_compile(GLuint shader, const char *shader_type);
-  void check_program_link(GLuint program);
+  QColor get_edge_color();
+  QColor get_points_color();
+  float get_line_thickness();
 };
 
 #endif  // OPENGLRENDERER_H
