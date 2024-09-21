@@ -6,6 +6,40 @@ MyOpenGLRenderer::MyOpenGLRenderer(QOpenGLWidget *glWidget, QObject *parent)
 }
 
 void MyOpenGLRenderer::initializeGL() {
+  m_glWidget->makeCurrent();
+  initializeOpenGLFunctions();
+  QColor color = get_color();
+  glClearColor(color.redF(), color.greenF(), color.blueF(), 1.0);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  Figure fig = get_figure()->normalize();
+  glVertexPointer(3, GL_FLOAT, 0, fig.points.data());
+  // GLenum error = glGetError();
+  // if (error != GL_NO_ERROR) {
+  //   qDebug() << "Ошибка glVertexPointer: " << error;
+  // }
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glDrawElements(GL_LINES, fig.edges.size(), GL_UNSIGNED_INT, fig.edges.data());
+  // error = glGetError();
+  // if (error != GL_NO_ERROR) {
+  //   qDebug() << "Ошибка glDrawElements: " << error;
+  //   qDebug() << fig.points.size();
+  //   qDebug() << fig.edges.size();
+  //   for (size_t i = 0; i < fig.points.size(); i = i + 3) {
+  //     qDebug() << "point " << i / 3 << ": " << fig.points[i] << " "
+  //              << fig.points[i + 1] << " " << fig.points[i + 2];
+  //   }
+  //   for (size_t i = 0; i < fig.edges.size(); i = i + 2) {
+  //     qDebug() << "edge " << i / 2 << ": " << fig.edges[i] << " "
+  //              << fig.edges[i + 1];
+  //   }
+  // }
+  glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+/* void MyOpenGLRenderer::initializeGL() {
   // qDebug() << "MyOpenGLRenderer::initializeGL called";
 
   m_glWidget->makeCurrent();
@@ -42,11 +76,11 @@ void MyOpenGLRenderer::initializeGL() {
   glDeleteBuffers(1, &VBO);
   glDeleteBuffers(1, &EdgeEBO);
   glDeleteVertexArrays(1, &VAO);
-}
+} */
 
 void MyOpenGLRenderer::paintGL() {
   // qDebug() << "MyOpenGLRenderer::paintGL called";
-  }
+}
 
 // void MyOpenGLRenderer::resizeGL(int w, int h) {
 //   glViewport(0, 0, w, h);

@@ -37,7 +37,7 @@ Figure Figure::parce(std::string& filename) {
   convert_shapes_to_edges(shapes);
 
   points = std::vector<float>(points_file);
-  edges = std::vector<int>(edges_file);
+  edges = std::vector<unsigned int>(edges_file);
 
   return *this;
 }
@@ -83,7 +83,7 @@ Figure Figure::normalize() {
   ModelInfo* info = modelinfo();
 
   points = std::vector<float>(points_file);
-  edges = std::vector<int>(edges_file);
+  edges = std::vector<unsigned int>(edges_file);
 
   float x_center = (min_x + max_x) / 2;
   float y_center = (min_y + max_y) / 2;

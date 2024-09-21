@@ -472,7 +472,7 @@
          <number>180</number>
         </property>
         <property name="tracking">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>

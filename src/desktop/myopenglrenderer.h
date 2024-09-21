@@ -1,13 +1,19 @@
 #ifndef OPENGLRENDERER_H
 #define OPENGLRENDERER_H
 
+// #define GL_SILENCE_DEPRECATION
+
+#include <QMessageBox>
+// #include <QWheelEvent>
 #include <QObject>
-#include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLWidget>
+#include <QWidget>
+#include <QtOpenGL>
+#include <iostream>
 
 #include "../obj/obj.hpp"
 
-class MyOpenGLRenderer : public QObject, protected QOpenGLFunctions_3_3_Core {
+class MyOpenGLRenderer : public QObject, protected QOpenGLFunctions {
   Q_OBJECT
 
  public:

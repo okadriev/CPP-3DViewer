@@ -13,10 +13,10 @@
 class Figure {
  private:
   std::vector<float> points_file;
-  std::vector<int> edges_file;
+  std::vector<unsigned int> edges_file;
 
-  int count_points;
-  int count_edges;
+  unsigned int count_points;
+  unsigned int count_edges;
   float min_x;
   float min_y;
   float min_z;
@@ -26,7 +26,7 @@ class Figure {
 
  public:
   std::vector<float> points;
-  std::vector<int> edges;
+  std::vector<unsigned int> edges;
 
   Figure();
   ~Figure();
