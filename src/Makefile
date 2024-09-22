@@ -11,17 +11,17 @@ TEST_EXEC = tests/test
 GIF_FLAG = -lgif
 GFLAG = -fprofile-arcs -ftest-coverage
 TFLAG = -lcheck -lsubunit -lm
-CFLAGS = -Wall -Wextra -Werror -std=c17 -g
+CFLAGS = -Wall -Wextra -Werror -std=c++17 -g
 
 MAIN_SRC= $(wildcard 3D_Viewer_2.0.cpp )
-MAIN_OBJ= $(patsubst %.c,%.o,$(MAIN_SRC))
+MAIN_OBJ= $(patsubst %.cpp,%.o,$(MAIN_SRC))
 
 VIEW_SRC= $(wildcard ./desktop/*.cpp )
-VIEW_OBJ= $(patsubst %.c,%.o,$(VIEW_SRC))
+VIEW_OBJ= $(patsubst %.cpp,%.o,$(VIEW_SRC))
 VIEW_LIB = view.a
 
 CNTRL_SRC= $(wildcard ./controller/*.cpp )
-CNTRL_OBJ= $(patsubst %.c,%.o,$(CNTRL_SRC))
+CNTRL_OBJ= $(patsubst %.cpp,%.o,$(CNTRL_SRC))
 CNTRL_LIB = controller.a
 
 MODEL_SRC = $(wildcard ./viewer/*/*.cpp )
@@ -51,17 +51,20 @@ $(MODEL_LIB): $(MODEL_OBJ)
 	@rm -f $(MODEL_OBJ) 
 .PHONY: $(MODEL_LIB)
 
-install: clear clean $(VIEW_LIB) $(CNTRL_LIB) $(MODEL_LIB)
-	@cd desktop && qmake && make        #####ПУСТЬ QMAKE СОБИРАЕТ ИЗ БИБЛИОТЕК VIEWER.A И DESKTOP.A И MAIN.C
-	@./$(BUILD_DIR)/$(EXEC) $(PARAM)
+install: clear clean
+	@clear
+	@cd desktop && qmake desktop.pro -o Makefile.viewer 
+	@$(MAKE) -C desktop -f Makefile.viewer 
+	@mv desktop/desktop $(BUILD_DIR)/$(EXEC)
+	@./$(BUILD_DIR)/$(EXEC)
 .PHONY: install
 
 run: install
-	@./$(BUILD_DIR)/$(EXEC) $(PARAM)
+	@./$(BUILD_DIR)/$(EXEC)
 .PHONY: run
 
 uninstall:
-	@rm -rf $(BUILD_DIR)
+	@rm -rf $(BUILD_DIR) ../setting.txt
 .PHONY: uninstall
 
 dvi: clear

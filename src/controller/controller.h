@@ -5,7 +5,7 @@
 #include <QColor>
 #include <QOpenGLWidget>
 
-#include "../obj/obj.hpp"
+#include "../viewer/obj/obj.hpp"
 
 class Controller {
  public:

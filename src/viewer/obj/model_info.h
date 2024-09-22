@@ -17,6 +17,6 @@ class ModelInfo {
   int scale;
 };
 
-#include "../desktop/figure.h"
+#include "../paint/figure.h" // починить костыль
 
 #endif  // MODELINFO_H

@@ -16,7 +16,7 @@
 #include <string>
 
 #include "../controller/controller.h"
-#include "myopenglrenderer.h"
+#include "../viewer/paint/myopenglrenderer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

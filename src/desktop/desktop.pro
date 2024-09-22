@@ -11,26 +11,28 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    figure.cpp \
-    main.cpp \
     mainwindow.cpp \
-    ../gif/gif.cpp \
-    ../obj/model_info.cpp \
-    ../obj/setting_info.cpp \
-    ../obj/obj.cpp \
-    myopenglrenderer.cpp \
-    point.cpp
+    ../3d_viewer_2.0.cpp \
+    ../controller/controller.cpp \
+    ../viewer/paint/figure.cpp \
+    ../viewer/gif/gif.cpp \
+    ../viewer/obj/model_info.cpp \
+    ../viewer/obj/setting_info.cpp \
+    ../viewer/obj/obj.cpp \
+    ../viewer/paint/myopenglrenderer.cpp \
+    ../viewer/paint/point.cpp
 
 HEADERS += \
-    figure.h \
     mainwindow.h \
-    ../gif/gif.hpp \
-    ../obj/obj.hpp \
-    ../obj/model_info.h \
-    ../obj/setting_info.h \
-    myopenglrenderer.h \
-    point.h \
-    tiny_obj_loader.h
+    ../controller/controller.h \
+    ../viewer/paint/figure.h \
+    ../viewer/gif/gif.hpp \
+    ../viewer/obj/obj.hpp \
+    ../viewer/obj/model_info.h \
+    ../viewer/obj/setting_info.h \
+    ../viewer/paint/myopenglrenderer.h \
+    ../viewer/paint/point.h \
+    ../viewer/paint/tiny_obj_loader.h
 
 FORMS += \
     mainwindow.ui
