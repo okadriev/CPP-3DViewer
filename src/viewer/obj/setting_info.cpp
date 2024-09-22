@@ -31,16 +31,16 @@ SettingInfo::SettingInfo() {
     vertex_size = std::stoi(line);
 
     f.close();
- 
+
   } else {
     projection_type = 0;
     edges_type = 0;
-    edge_color = NULL;
-    edge_thickness = 0;
+    edge_color = std::make_unique<std::string>("#ffffff");
+    edge_thickness = 5;
     background_color = NULL;
     vertex_type = 0;
-    vertex_color = NULL;
-    vertex_size = 0;
+    vertex_color = std::make_unique<std::string>("#ffffff");
+    vertex_size = 5;
   }
 }
 

@@ -53,7 +53,7 @@ void Controller::update_setting_info(bool push, bool solid,
                                      int value) {
   if (push) {
     setting_info->edges_type = solid ? SOLID_EDGE : DASHED_EDGE;
-    setting_info->edge_color = std::move(temp);
+    if (temp) setting_info->edge_color = std::move(temp);
     setting_info->edge_thickness = value;
   }
 }
@@ -70,7 +70,7 @@ void Controller::update_setting_info(bool push, bool zero, bool cercle,
     else if (square)
       setting_info->vertex_type = SQUARE;
 
-    setting_info->vertex_color = std::move(temp);
+    if (temp) setting_info->vertex_color = std::move(temp);
     setting_info->vertex_size = value;
   }
 }

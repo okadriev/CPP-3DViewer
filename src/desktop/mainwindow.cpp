@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
   ui->MainStackedWidget->setCurrentIndex(I_ONE);
 
   setupOpenGL();
+  updateInfoLabel();
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -114,19 +115,19 @@ void MainWindow::on_TransposeLineEdit_z_textChanged(const QString &text) {
 
 void MainWindow::on_RotateScrollBar_x_valueChanged(int value) {
   ui->RotateLineEdit_x->setText(QString::number(value));
-  controller.update_model_info('z', 'x', value);
+  controller.update_model_info('r', 'x', value);
   updateInfoLabel();
 }
 
 void MainWindow::on_RotateScrollBar_y_valueChanged(int value) {
   ui->RotateLineEdit_y->setText(QString::number(value));
-  controller.update_model_info('z', 'y', value);
+  controller.update_model_info('r', 'y', value);
   updateInfoLabel();
 }
 
 void MainWindow::on_RotateScrollBar_z_valueChanged(int value) {
   ui->RotateLineEdit_z->setText(QString::number(value));
-  controller.update_model_info('z', 'z', value);
+  controller.update_model_info('r', 'z', value);
   updateInfoLabel();
 }
 
@@ -135,7 +136,7 @@ void MainWindow::on_RotateLineEdit_x_textChanged(const QString &text) {
   int value = text.toInt(&ok);
   if (ok && value >= 0 && value <= 100) {
     ui->RotateScrollBar_x->setValue(value);
-    controller.update_model_info('z', 'x', value);
+    controller.update_model_info('r', 'x', value);
     updateInfoLabel();
   }
 }
@@ -145,7 +146,7 @@ void MainWindow::on_RotateLineEdit_y_textChanged(const QString &text) {
   int value = text.toInt(&ok);
   if (ok && value >= 0 && value <= 100) {
     ui->RotateScrollBar_y->setValue(value);
-    controller.update_model_info('z', 'y', value);
+    controller.update_model_info('r', 'y', value);
     updateInfoLabel();
   }
 }
@@ -155,7 +156,7 @@ void MainWindow::on_RotateLineEdit_z_textChanged(const QString &text) {
   int value = text.toInt(&ok);
   if (ok && value >= 0 && value <= 100) {
     ui->RotateScrollBar_z->setValue(value);
-    controller.update_model_info('z', 'z', value);
+    controller.update_model_info('r', 'z', value);
     updateInfoLabel();
   }
 }
