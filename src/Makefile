@@ -51,7 +51,7 @@ $(MODEL_LIB): $(MODEL_OBJ)
 	@rm -f $(MODEL_OBJ) 
 .PHONY: $(MODEL_LIB)
 
-install: clean
+install:
 	@clear
 	@cd desktop && qmake desktop.pro -o Makefile.viewer
 	@$(MAKE) -C desktop -f Makefile.viewer
@@ -60,14 +60,14 @@ install: clean
 .PHONY: install
 
 run: install
-	@clear
 	@./$(BUILD_DIR)/$(EXEC)
 .PHONY: run
 
 uninstall:
-	@clear
 	@rm -rf $(BUILD_DIR) ../setting.txt
 .PHONY: uninstall
+
+reinstall: clean uninstall install
 
 dvi: 
 	# sudo apt-get install texlive-xetex
@@ -105,23 +105,23 @@ leak_check:
 	@valgrind --tool=memcheck --leak-check=yes ./$(TEST_EXEC)
 .PHONY: leak_check
 
-cpp_check: 
-	@clear
-	@cppcheck --enable=all --suppress=missingIncludeSystem --language=c++ $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC)
-.PHONY: cpp_check
+# cpp_check: 
+# 	@clear
+# 	@cppcheck --enable=all --suppress=missingIncludeSystem --language=c++ $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC)
+# .PHONY: cpp_check
 
-clang_check: 
-	@clear
-	@cp ../materials/linters/.clang-format .
-	@clang-format -n $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC)
-.PHONY: clang_check
+# clang_check:
+# 	@clear
+# 	@cp ../materials/linters/.clang-format .
+# 	@clang-format -n $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC)
+# .PHONY: clang_check
 
 clean:
 	@rm -f $(TEST_OBJ) $(TEST_EXEC)
 	@rm -rf $(BUILD_DIR) latex html */*.o
 	@rm -f $(VIEW_LIB) $(MODEL_LIB)
 	@rm -rf coverage_report gcov_r Doxyfile README.md
-	@rm -f desktop/Makefile.viewer desktop/.qmake.stash
+	@rm -f desktop/Makefile.viewer desktop/.qmake.stash desktop/ui_mainwindow.h desktop/*.user
 .PHONY: clean
 
 test: clean $(TEST_OBJ)
@@ -130,4 +130,3 @@ test: clean $(TEST_OBJ)
 
 %.o: %.cpp
 	@$(CC) $(CFLAGS) $(GIF_FLAG) -cpp $< -o $@
-

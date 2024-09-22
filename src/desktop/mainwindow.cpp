@@ -21,7 +21,9 @@ void MainWindow::on_OpenFileButton_clicked() {
   updateInfoLabel();
 }
 
-void MainWindow::on_SaveButton_clicked() { controller.update_setting_info(true); }
+void MainWindow::on_SaveButton_clicked() {
+  controller.update_setting_info(true);
+}
 
 void MainWindow::on_ScreenButton_clicked() {
   QScreen *screen = QGuiApplication::primaryScreen();

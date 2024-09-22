@@ -1,6 +1,6 @@
-QT += core gui opengl widgets openglwidgets
+QT += core gui opengl widgets openglwidgets #проверить по одному
 
-#INCLUDEPATH += $$[QT_INSTALL_HEADERS]
+INCLUDEPATH += $$[QT_INSTALL_HEADERS] #проверить вообще нужен ли?
 
 #greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
