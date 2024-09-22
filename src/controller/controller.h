@@ -14,9 +14,7 @@ class Controller {
   void update_model_info(QString filename);
   void update_model_info(char action, char axis, double value);
   void update_model_info(int scale);
-  std::unique_ptr<std::string> get_filename() {
-    return std::move(model_info->filename);
-  };
+    std::unique_ptr<std::string> get_filename();
   int get_vertices() { return model_info->num_vertices; };
   int get_edges() { return model_info->num_edges; };
   double get_trans_x() { return model_info->trans_x; };

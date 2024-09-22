@@ -79,6 +79,12 @@ void Controller::update_setting_info(int value) {
   setting_info->projection_type = value;
 }
 
+std::unique_ptr<std::string> Controller::get_filename() {
+  return model_info->filename
+             ? std::make_unique<std::string>(*model_info->filename)
+             : nullptr;
+};
+
 void Controller::gif_start(QOpenGLWidget* openGLWidget, QString filename) {
   // if (!filename.isEmpty()) {
   //   GifRecorder recorder(ui->openGLWidget);
