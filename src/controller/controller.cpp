@@ -14,27 +14,27 @@ void Controller::update_model_info(QString filename) {
 }
 
 void Controller::update_model_info(char action, char axis, double value) {
-  if (action = 'r') {
-    if (axis = 'x') {
+  if (action == 'r') {
+    if (axis == 'x') {
       model_info->rotate_x = value;
-    } else if (axis = 'y') {
+    } else if (axis == 'y') {
       model_info->rotate_y = value;
-    } else if (axis = 'z') {
+    } else if (axis == 'z') {
       model_info->rotate_z = value;
     }
 
-  } else if (action = 't') {
-    if (axis = 'x') {
+  } else if (action == 't') {
+    if (axis == 'x') {
       model_info->trans_x = value;
-    } else if (axis = 'y') {
+    } else if (axis == 'y') {
       model_info->trans_y = value;
-    } else if (axis = 'z') {
+    } else if (axis == 'z') {
       model_info->trans_z = value;
     }
   }
 }
 
-void Controller::update_model_info(int scale) { model_info->scale = value; }
+void Controller::update_model_info(int scale) { model_info->scale = scale; }
 
 void Controller::update_setting_info(bool push) {
   if (push) setting_info->save_settings();
@@ -80,8 +80,8 @@ void Controller::update_setting_info(int value) {
 }
 
 void Controller::gif_start(QOpenGLWidget* openGLWidget, QString filename) {
-  if (!filename.isEmpty()) {
-    GifRecorder recorder(ui->openGLWidget);
-    recorder.startRecord(filename);
-  }
+  // if (!filename.isEmpty()) {
+  //   GifRecorder recorder(ui->openGLWidget);
+  //   recorder.startRecord(filename);
+  // }
 }

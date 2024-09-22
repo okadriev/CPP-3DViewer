@@ -177,9 +177,9 @@ void MainWindow::on_ScaleLineEdit_textChanged(const QString &text) {
 }
 
 void MainWindow::on_CancelEdgesButton_clicked(QAbstractButton *button) {
-  controller.update_model_info(
+  controller.update_setting_info(
       ui->CancelEdgesButton->standardButton(button) == QDialogButtonBox::Ok,
-      ui->SolidEdgesRadioButton->isChecked(), temp,
+      ui->SolidEdgesRadioButton->isChecked(), std::move(temp),
       ui->SizeEdgesScrollBar->value());
   updateInfoLabel();
   ui->MainStackedWidget->setCurrentIndex(I_ONE);
@@ -207,11 +207,11 @@ void MainWindow::on_EdgesLineEdit_textChanged(const QString &text) {
 }
 
 void MainWindow::on_CancelVertexButton_clicked(QAbstractButton *button) {
-  controller.update_model_info(
+  controller.update_setting_info(
       ui->CancelVertexButton->standardButton(button) == QDialogButtonBox::Ok,
       ui->NoneVertexRadioButton->isChecked(),
       ui->CercleVertexRadioButton->isChecked(),
-      ui->SquareVertexRadioButton->isChecked(), temp,
+      ui->SquareVertexRadioButton->isChecked(), std::move(temp),
       ui->SizeVertexScrollBar->value());
   updateInfoLabel();
   ui->MainStackedWidget->setCurrentIndex(I_ONE);
@@ -239,12 +239,12 @@ void MainWindow::on_VertexLineEdit_textChanged(const QString &text) {
 }
 
 void MainWindow::on_ParallelButton_clicked() {
-  controller.update_model_info(V_PARALLEL);
+  controller.update_setting_info(V_PARALLEL);
   updateInfoLabel();
 }
 
 void MainWindow::on_CenterButton_clicked() {
-  controller.update_model_info(V_CENTER);
+  controller.update_setting_info(V_CENTER);
   updateInfoLabel();
 }
 
@@ -257,36 +257,36 @@ void MainWindow::updateOpenGLWidget() {
 void MainWindow::updateInfoLabel() {
   QString info;
   info += QString("Файл: %1\n")
-              .arg(model_info->filename ? [](const std::string &path) {
+              .arg(controller.get_filename() ? [](const std::string &path) {
                 std::filesystem::path filepath(path);
                 return QString::fromStdString(filepath.filename().string());
-              }(*model_info->filename)
-                                        : "Не выбран");
+              }(*controller.get_filename())
+                                             : "Не выбран");
 
-  info += QString("Вершины: %1\n").arg(model_info->num_vertices);
-  info += QString("Рёбра: %1\n\n").arg(model_info->num_edges);
-  info += QString("Масштаб: %1\n").arg(model_info->scale);
+  info += QString("Вершины: %1\n").arg(controller.get_vertices());
+  info += QString("Рёбра: %1\n\n").arg(controller.get_edges());
+  info += QString("Масштаб: %1\n").arg(controller.get_scale());
   info += QString("Смещение: (%1, %2, %3)\n")
-              .arg(model_info->trans_x)
-              .arg(model_info->trans_y)
-              .arg(model_info->trans_z);
+              .arg(controller.get_trans_x())
+              .arg(controller.get_trans_y())
+              .arg(controller.get_trans_z());
   info += QString("Поворот: (%1, %2, %3)\n\n")
-              .arg(model_info->rotate_x)
-              .arg(model_info->rotate_y)
-              .arg(model_info->rotate_z);
-  info +=
-      QString("Тип проекции: %1\n\n")
-          .arg(!setting_info->projection_type ? "Параллельная" : "Центральная");
+              .arg(controller.get_rotate_x())
+              .arg(controller.get_rotate_y())
+              .arg(controller.get_rotate_z());
+  info += QString("Тип проекции: %1\n\n")
+              .arg(!controller.get_projection_type() ? "Параллельная"
+                                                     : "Центральная");
 
   info += QString("Тип рёбер: %1\n")
-              .arg(!setting_info->edges_type ? "Сплошные" : "Пунктирные");
-  info += QString("Толщина рёбер: %1\n\n").arg(setting_info->edge_thickness);
+              .arg(!controller.get_edges_type() ? "Сплошные" : "Пунктирные");
+  info += QString("Толщина рёбер: %1\n\n").arg(controller.get_edge_thickness());
 
   info += QString("Тип вершин: %1\n")
-              .arg(!setting_info->vertex_type            ? "Нет"
-                   : setting_info->vertex_type == CERCLE ? "Круг"
-                                                         : "Квадрат");
-  info += QString("Размер вершин: %1\n").arg(setting_info->vertex_size);
+              .arg(!controller.get_vertex_type()            ? "Нет"
+                   : controller.get_vertex_type() == CERCLE ? "Круг"
+                                                            : "Квадрат");
+  info += QString("Размер вершин: %1\n").arg(controller.get_vertex_size());
 
   ui->InfoLabel->setText(info);
 }

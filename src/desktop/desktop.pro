@@ -1,4 +1,4 @@
-QT += core gui opengl widgets openglwidgets #проверить по одному
+QT += core gui opengl widgets  #проверить по одному
 
 INCLUDEPATH += $$[QT_INSTALL_HEADERS] #проверить вообще нужен ли?
 
