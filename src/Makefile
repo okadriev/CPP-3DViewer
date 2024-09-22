@@ -28,8 +28,8 @@ MODEL_SRC = $(wildcard ./viewer/*/*.cpp )
 MODEL_OBJ = $(SCREEN_SRC:.cpp=.o)
 MODEL_LIB = model.a
 
-BUILD_DIR = build 																					 ##### ДОБАВИТЬ В QMAKE ЧТОБЫ УСТАНАВЛИВАЛОСЬ СЮДА
-EXEC = 3D_Viewer_2.0 																				 #### ДОБАВИТЬ В QMAKE ЧТОБЫ УСТАНАВЛИВАЛОСЬ СЮДА
+BUILD_DIR = build
+EXEC = 3D_Viewer_2.0
 
 all: install run
 
@@ -51,26 +51,29 @@ $(MODEL_LIB): $(MODEL_OBJ)
 	@rm -f $(MODEL_OBJ) 
 .PHONY: $(MODEL_LIB)
 
-install: clear clean
+install: clean
 	@clear
-	@cd desktop && qmake desktop.pro -o Makefile.viewer 
-	@$(MAKE) -C desktop -f Makefile.viewer 
+	@cd desktop && qmake desktop.pro -o Makefile.viewer
+	@$(MAKE) -C desktop -f Makefile.viewer
 	@mv desktop/desktop $(BUILD_DIR)/$(EXEC)
 	@./$(BUILD_DIR)/$(EXEC)
 .PHONY: install
 
 run: install
+	@clear
 	@./$(BUILD_DIR)/$(EXEC)
 .PHONY: run
 
 uninstall:
+	@clear
 	@rm -rf $(BUILD_DIR) ../setting.txt
 .PHONY: uninstall
 
-dvi: clear
+dvi: 
 	# sudo apt-get install texlive-xetex
 	# sudo apt-get install texlive-lang-cyrillic
 	# sudo apt-get install doxygen
+	@clear
 	@cp docs/Doxyfile .
 	@cp docs/README.md .
 	@doxygen Doxyfile
@@ -80,10 +83,12 @@ dvi: clear
 .PHONY: dvi
 
 dist: install
+	@clear
 	@tar -cvzf breack_game.tgz $(BUILD_DIR)
 .PHONY: dist
 
-gcov_report: clear clean
+gcov_report: clean
+	@clear 
 	@$(CC) $(CFLAGS) -g -c  gtk/s21_parce.c -o s21_parce.o --coverage
 	@$(CC) $(CFLAGS) -g -c   gtk/s21_matrix.c -o s21_matrix.o --coverage
 	@$(CC) $(CFLAGS) $(GFLAG) -o gcov_r $(TEST_SRC) s21_parce.o s21_matrix.o $(TFLAG)
@@ -95,28 +100,28 @@ gcov_report: clear clean
 	@rm -f */*.gcno */*.gcda
 .PHONY: gcov_report
 
-leak_check: clear
+leak_check: 
+	@clear
 	@valgrind --tool=memcheck --leak-check=yes ./$(TEST_EXEC)
 .PHONY: leak_check
 
-cpp_check: clear
+cpp_check: 
+	@clear
 	@cppcheck --enable=all --suppress=missingIncludeSystem --language=c++ $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC)
 .PHONY: cpp_check
 
-clang_check: clear
+clang_check: 
+	@clear
 	@cp ../materials/linters/.clang-format .
 	@clang-format -n $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC)
 .PHONY: clang_check
-
-clear:
-	clear
-.PHONY: clear
 
 clean:
 	@rm -f $(TEST_OBJ) $(TEST_EXEC)
 	@rm -rf $(BUILD_DIR) latex html */*.o
 	@rm -f $(VIEW_LIB) $(MODEL_LIB)
 	@rm -rf coverage_report gcov_r Doxyfile README.md
+	@rm -f desktop/Makefile.viewer desktop/.qmake.stash
 .PHONY: clean
 
 test: clean $(TEST_OBJ)
