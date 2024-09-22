@@ -15,8 +15,7 @@
 #include <filesystem>
 #include <string>
 
-#include "../gif/gif.hpp"
-#include "../obj/obj.hpp"
+#include "../controller/controller.h"
 #include "myopenglrenderer.h"
 
 QT_BEGIN_NAMESPACE
@@ -67,8 +66,7 @@ class MainWindow : public QMainWindow {
 
  private:
   Ui::MainWindow *ui;
-  ModelInfo *model_info;
-  SettingInfo *setting_info;
+  Controller controller;
   std::unique_ptr<std::string> temp;
   QOpenGLWidget *openGLWidget;
   MyOpenGLRenderer *m_renderer;
@@ -82,5 +80,7 @@ class MainWindow : public QMainWindow {
 };
 
 typedef enum { I_ONE, I_TWO, I_THREE } IndexType;
+// перечисление для типа проекции
+typedef enum { V_PARALLEL, V_CENTER } ProjectType;
 
 #endif  // MAINWINDOW_H

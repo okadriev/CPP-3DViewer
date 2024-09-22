@@ -3,12 +3,9 @@
 #include "./ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
 
-  model_info = modelinfo();
-  setting_info = settinginfo();
   setWindowTitle("3D Viewer");
   ui->MainStackedWidget->setCurrentIndex(I_ONE);
 
@@ -20,16 +17,11 @@ MainWindow::~MainWindow() { delete ui; }
 void MainWindow::on_OpenFileButton_clicked() {
   QString fileName = QFileDialog::getOpenFileName(this, "Открыть файл", "",
                                                   "OBJ files (*.obj)");
-  if (!fileName.isEmpty())
-    model_info->filename =
-        std::make_unique<std::string>(fileName.toStdString());
-
-  model_info->zero_model_info();
-
+  controller.update_model_info(fileName);
   updateInfoLabel();
 }
 
-void MainWindow::on_SaveButton_clicked() { setting_info->save_settings(); }
+void MainWindow::on_SaveButton_clicked() { controller.update_setting_info(true); }
 
 void MainWindow::on_ScreenButton_clicked() {
   QScreen *screen = QGuiApplication::primaryScreen();
@@ -51,24 +43,15 @@ void MainWindow::on_ScreenButton_clicked() {
   }
 }
 
-void MainWindow::on_GifButton_clicked()
-{
-    QString filename = QFileDialog::getSaveFileName(this, "Save GIF", "", "GIF Files (*.gif)");
-    if (!filename.isEmpty()) {
-        GifRecorder recorder(ui->openGLWidget);
-        recorder.startRecord(filename);
-    }
+void MainWindow::on_GifButton_clicked() {
+  QString filename =
+      QFileDialog::getSaveFileName(this, "Save GIF", "", "GIF Files (*.gif)");
+  controller.gif_start(ui->openGLWidget, filename);
 }
-
 
 void MainWindow::on_BackgroundColorButton_clicked() {
   QColor color = QColorDialog::getColor();
-  if (color.isValid()) {
-    QString colorStr = color.name();
-    setting_info->background_color =
-        std::make_unique<std::string>(colorStr.toStdString());
-    updateInfoLabel();
-  }
+  controller.update_setting_info(color);
 }
 
 void MainWindow::on_VertexButton_clicked() {
@@ -81,19 +64,19 @@ void MainWindow::on_EdgesButton_clicked() {
 
 void MainWindow::on_TransposeScrollBar_x_valueChanged(int value) {
   ui->TransposeLineEdit_x->setText(QString::number(value));
-  model_info->trans_x = value;
+  controller.update_model_info('t', 'x', value);
   updateInfoLabel();
 }
 
 void MainWindow::on_TransposeScrollBar_y_valueChanged(int value) {
   ui->TransposeLineEdit_y->setText(QString::number(value));
-  model_info->trans_y = value;
+  controller.update_model_info('t', 'y', value);
   updateInfoLabel();
 }
 
 void MainWindow::on_TransposeScrollBar_z_valueChanged(int value) {
   ui->TransposeLineEdit_z->setText(QString::number(value));
-  model_info->trans_z = value;
+  controller.update_model_info('t', 'z', value);
   updateInfoLabel();
 }
 
@@ -102,7 +85,7 @@ void MainWindow::on_TransposeLineEdit_x_textChanged(const QString &text) {
   int value = text.toInt(&ok);
   if (ok && value >= 0 && value <= 100) {
     ui->TransposeScrollBar_x->setValue(value);
-    model_info->trans_x = value;
+    controller.update_model_info('t', 'x', value);
     updateInfoLabel();
   }
 }
@@ -112,7 +95,7 @@ void MainWindow::on_TransposeLineEdit_y_textChanged(const QString &text) {
   int value = text.toInt(&ok);
   if (ok && value >= 0 && value <= 100) {
     ui->TransposeScrollBar_y->setValue(value);
-    model_info->trans_y = value;
+    controller.update_model_info('t', 'y', value);
     updateInfoLabel();
   }
 }
@@ -122,26 +105,26 @@ void MainWindow::on_TransposeLineEdit_z_textChanged(const QString &text) {
   int value = text.toInt(&ok);
   if (ok && value >= 0 && value <= 100) {
     ui->TransposeScrollBar_z->setValue(value);
-    model_info->trans_z = value;
+    controller.update_model_info('t', 'z', value);
     updateInfoLabel();
   }
 }
 
 void MainWindow::on_RotateScrollBar_x_valueChanged(int value) {
   ui->RotateLineEdit_x->setText(QString::number(value));
-  model_info->rotate_x = value;
+  controller.update_model_info('z', 'x', value);
   updateInfoLabel();
 }
 
 void MainWindow::on_RotateScrollBar_y_valueChanged(int value) {
   ui->RotateLineEdit_y->setText(QString::number(value));
-  model_info->rotate_y = value;
+  controller.update_model_info('z', 'y', value);
   updateInfoLabel();
 }
 
 void MainWindow::on_RotateScrollBar_z_valueChanged(int value) {
   ui->RotateLineEdit_z->setText(QString::number(value));
-  model_info->rotate_z = value;
+  controller.update_model_info('z', 'z', value);
   updateInfoLabel();
 }
 
@@ -150,7 +133,7 @@ void MainWindow::on_RotateLineEdit_x_textChanged(const QString &text) {
   int value = text.toInt(&ok);
   if (ok && value >= 0 && value <= 100) {
     ui->RotateScrollBar_x->setValue(value);
-    model_info->rotate_x = value;
+    controller.update_model_info('z', 'x', value);
     updateInfoLabel();
   }
 }
@@ -160,7 +143,7 @@ void MainWindow::on_RotateLineEdit_y_textChanged(const QString &text) {
   int value = text.toInt(&ok);
   if (ok && value >= 0 && value <= 100) {
     ui->RotateScrollBar_y->setValue(value);
-    model_info->rotate_y = value;
+    controller.update_model_info('z', 'y', value);
     updateInfoLabel();
   }
 }
@@ -170,14 +153,14 @@ void MainWindow::on_RotateLineEdit_z_textChanged(const QString &text) {
   int value = text.toInt(&ok);
   if (ok && value >= 0 && value <= 100) {
     ui->RotateScrollBar_z->setValue(value);
-    model_info->rotate_z = value;
+    controller.update_model_info('z', 'z', value);
     updateInfoLabel();
   }
 }
 
 void MainWindow::on_ScaleScrollBar_valueChanged(int value) {
   ui->ScaleLineEdit->setText(QString::number(value));
-  model_info->scale = value;
+  controller.update_model_info(int scale);
   updateInfoLabel();
 }
 
@@ -186,19 +169,17 @@ void MainWindow::on_ScaleLineEdit_textChanged(const QString &text) {
   int value = text.toInt(&ok);
   if (ok && value >= 0 && value <= 100) {
     ui->ScaleScrollBar->setValue(value);
-    model_info->scale = value;
+    controller.update_model_info(int scale);
     updateInfoLabel();
   }
 }
 
 void MainWindow::on_CancelEdgesButton_clicked(QAbstractButton *button) {
-  if (ui->CancelEdgesButton->standardButton(button) == QDialogButtonBox::Ok) {
-    setting_info->edges_type =
-        ui->SolidEdgesRadioButton->isChecked() ? SOLID_EDGE : DASHED_EDGE;
-    setting_info->edge_color = std::move(temp);
-    setting_info->edge_thickness = ui->SizeEdgesScrollBar->value();
-    updateInfoLabel();
-  }
+  controller.controller.update_model_info(
+      ui->CancelEdgesButton->standardButton(button) == QDialogButtonBox::Ok,
+      ui->SolidEdgesRadioButton->isChecked(), temp,
+      ui->SizeEdgesScrollBar->value());
+  updateInfoLabel();
   ui->MainStackedWidget->setCurrentIndex(I_ONE);
 }
 
@@ -224,18 +205,13 @@ void MainWindow::on_EdgesLineEdit_textChanged(const QString &text) {
 }
 
 void MainWindow::on_CancelVertexButton_clicked(QAbstractButton *button) {
-  if (ui->CancelVertexButton->standardButton(button) == QDialogButtonBox::Ok) {
-    if (ui->NoneVertexRadioButton->isChecked())
-      setting_info->vertex_type = ZERO;
-    else if (ui->CercleVertexRadioButton->isChecked())
-      setting_info->vertex_type = CERCLE;
-    else if (ui->SquareVertexRadioButton->isChecked())
-      setting_info->vertex_type = SQUARE;
-
-    setting_info->vertex_color = std::move(temp);
-    setting_info->vertex_size = ui->SizeVertexScrollBar->value();
-    updateInfoLabel();
-  }
+  controller.controller.update_model_info(
+      ui->CancelVertexButton->standardButton(button) == QDialogButtonBox::Ok,
+      ui->NoneVertexRadioButton->isChecked(),
+      ui->CercleVertexRadioButton->isChecked(),
+      ui->SquareVertexRadioButton->isChecked(), temp,
+      ui->SizeVertexScrollBar->value());
+  updateInfoLabel();
   ui->MainStackedWidget->setCurrentIndex(I_ONE);
 }
 
@@ -261,12 +237,12 @@ void MainWindow::on_VertexLineEdit_textChanged(const QString &text) {
 }
 
 void MainWindow::on_ParallelButton_clicked() {
-  setting_info->projection_type = PARALLEL;
+  controller.controller.update_model_info(V_PARALLEL);
   updateInfoLabel();
 }
 
 void MainWindow::on_CenterButton_clicked() {
-  setting_info->projection_type = CENTER;
+  controller.controller.update_model_info(V_CENTER);
   updateInfoLabel();
 }
 
