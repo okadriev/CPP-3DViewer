@@ -64,7 +64,7 @@ run: install
 .PHONY: run
 
 uninstall:
-	@rm -rf $(BUILD_DIR) ../setting.txt
+	@rm -rf $(BUILD_DIR) ../setting.txt *.a
 .PHONY: uninstall
 
 reinstall: clean uninstall install
