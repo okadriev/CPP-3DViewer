@@ -162,7 +162,7 @@ void MainWindow::on_RotateLineEdit_z_textChanged(const QString &text) {
 
 void MainWindow::on_ScaleScrollBar_valueChanged(int value) {
   ui->ScaleLineEdit->setText(QString::number(value));
-  controller.update_model_info(int scale);
+  controller.update_model_info(value);
   updateInfoLabel();
 }
 
@@ -171,13 +171,13 @@ void MainWindow::on_ScaleLineEdit_textChanged(const QString &text) {
   int value = text.toInt(&ok);
   if (ok && value >= 0 && value <= 100) {
     ui->ScaleScrollBar->setValue(value);
-    controller.update_model_info(int scale);
+    controller.update_model_info(value);
     updateInfoLabel();
   }
 }
 
 void MainWindow::on_CancelEdgesButton_clicked(QAbstractButton *button) {
-  controller.controller.update_model_info(
+  controller.update_model_info(
       ui->CancelEdgesButton->standardButton(button) == QDialogButtonBox::Ok,
       ui->SolidEdgesRadioButton->isChecked(), temp,
       ui->SizeEdgesScrollBar->value());
@@ -207,7 +207,7 @@ void MainWindow::on_EdgesLineEdit_textChanged(const QString &text) {
 }
 
 void MainWindow::on_CancelVertexButton_clicked(QAbstractButton *button) {
-  controller.controller.update_model_info(
+  controller.update_model_info(
       ui->CancelVertexButton->standardButton(button) == QDialogButtonBox::Ok,
       ui->NoneVertexRadioButton->isChecked(),
       ui->CercleVertexRadioButton->isChecked(),
@@ -239,12 +239,12 @@ void MainWindow::on_VertexLineEdit_textChanged(const QString &text) {
 }
 
 void MainWindow::on_ParallelButton_clicked() {
-  controller.controller.update_model_info(V_PARALLEL);
+  controller.update_model_info(V_PARALLEL);
   updateInfoLabel();
 }
 
 void MainWindow::on_CenterButton_clicked() {
-  controller.controller.update_model_info(V_CENTER);
+  controller.update_model_info(V_CENTER);
   updateInfoLabel();
 }
 
@@ -360,39 +360,6 @@ void MainWindow::setupConnections() {
           &MainWindow::on_ParallelButton_clicked);
   connect(ui->CenterButton, &QPushButton::clicked, this,
           &MainWindow::on_CenterButton_clicked);
-}
-
-void MainWindow::printDebugInfo() {
-  qDebug() << "ModelInfo:";
-  qDebug() << "  filename:"
-           << (model_info->filename ? model_info->filename->c_str()
-                                    : "nullptr");
-  qDebug() << "  num_vertices:" << model_info->num_vertices;
-  qDebug() << "  num_edges:" << model_info->num_edges;
-  qDebug() << "  trans_x:" << model_info->trans_x;
-  qDebug() << "  trans_y:" << model_info->trans_y;
-  qDebug() << "  trans_z:" << model_info->trans_z;
-  qDebug() << "  rotate_x:" << model_info->rotate_x;
-  qDebug() << "  rotate_y:" << model_info->rotate_y;
-  qDebug() << "  rotate_z:" << model_info->rotate_z;
-  qDebug() << "  scale:" << model_info->scale;
-
-  qDebug() << "SettingInfo:";
-  qDebug() << "  projection_type:" << setting_info->projection_type;
-  qDebug() << "  edges_type:" << setting_info->edges_type;
-  qDebug() << "  edge_color:"
-           << (setting_info->edge_color ? setting_info->edge_color->c_str()
-                                        : "nullptr");
-  qDebug() << "  edge_thickness:" << setting_info->edge_thickness;
-  qDebug() << "  background_color:"
-           << (setting_info->background_color
-                   ? setting_info->background_color->c_str()
-                   : "nullptr");
-  qDebug() << "  vertex_type:" << setting_info->vertex_type;
-  qDebug() << "  vertex_color:"
-           << (setting_info->vertex_color ? setting_info->vertex_color->c_str()
-                                          : "nullptr");
-  qDebug() << "  vertex_size:" << setting_info->vertex_size;
 }
 
 void MainWindow::setupOpenGL() {

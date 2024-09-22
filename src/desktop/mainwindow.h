@@ -76,7 +76,6 @@ class MainWindow : public QMainWindow {
   void setupConnections();
   void updateOpenGLWidget();
   void updateInfoLabel();
-  void printDebugInfo();  ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 };
 
 typedef enum { I_ONE, I_TWO, I_THREE } IndexType;
