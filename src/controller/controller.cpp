@@ -49,7 +49,7 @@ void Controller::update_setting_info(QColor color) {
 }
 
 void Controller::update_setting_info(bool push, bool solid,
-                                     std::make_unique<std::string> temp,
+                                     std::unique_ptr<std::string> temp,
                                      int value) {
   if (push) {
     setting_info->edges_type = solid ? SOLID_EDGE : DASHED_EDGE;
@@ -60,7 +60,7 @@ void Controller::update_setting_info(bool push, bool solid,
 
 void Controller::update_setting_info(bool push, bool zero, bool cercle,
                                      bool square,
-                                     std::make_unique<std::string> temp,
+                                     std::unique_ptr<std::string> temp,
                                      int value) {
   if (push) {
     if (zero)
