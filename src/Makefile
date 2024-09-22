@@ -12,7 +12,7 @@ run:
 	@./3Dviewer
 
 uninstall:
-	@rm -rf 3Dviewer
+	@rm -rf 3Dviewer ../setting.txt
 
 clean:
 	@rm -rf build-* desktop/desktop
