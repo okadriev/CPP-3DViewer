@@ -11,15 +11,15 @@
 #include <QPixmap>
 #include <QScreen>
 #include <QScrollBar>
+#include <QThread>
 #include <QTimer>
 #include <QWindow>
-#include <QThread>
-#include "QtGifImage/include/QtGifImage/qgifimage.h"
 #include <filesystem>
 #include <string>
 
 #include "../controller/controller.h"
 #include "../viewer/paint/myopenglrenderer.h"
+#include "QtGifImage/include/QtGifImage/qgifimage.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -66,7 +66,7 @@ class MainWindow : public QMainWindow {
   void on_VertexLineEdit_textChanged(const QString &text);
   void on_ParallelButton_clicked();
   void on_CenterButton_clicked();
-  // void recordGifFrame();
+  void new_frame();
 
  private:
   Ui::MainWindow *ui;
@@ -75,7 +75,10 @@ class MainWindow : public QMainWindow {
   QOpenGLWidget *openGLWidget;
   MyOpenGLRenderer *m_renderer;
   QTimer *t;
+  QGifImage gif;
+  QString gif_file;
 
+  QPixmap get_screen();
   void setupOpenGL();
   void setupConnections();
   void updateOpenGLWidget();

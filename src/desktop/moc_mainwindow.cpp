@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
     QByteArrayData data[38];
-    char stringdata0[1005];
+    char stringdata0[1000];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -69,7 +69,7 @@ QT_MOC_LITERAL(33, 874, 35), // "on_SizeVertexScrollBar_valueC..."
 QT_MOC_LITERAL(34, 910, 29), // "on_VertexLineEdit_textChanged"
 QT_MOC_LITERAL(35, 940, 25), // "on_ParallelButton_clicked"
 QT_MOC_LITERAL(36, 966, 23), // "on_CenterButton_clicked"
-QT_MOC_LITERAL(37, 990, 14) // "recordGifFrame"
+QT_MOC_LITERAL(37, 990, 9) // "new_frame"
 
     },
     "MainWindow\0on_OpenFileButton_clicked\0"
@@ -101,7 +101,7 @@ QT_MOC_LITERAL(37, 990, 14) // "recordGifFrame"
     "on_SizeVertexScrollBar_valueChanged\0"
     "on_VertexLineEdit_textChanged\0"
     "on_ParallelButton_clicked\0"
-    "on_CenterButton_clicked\0recordGifFrame"
+    "on_CenterButton_clicked\0new_frame"
 };
 #undef QT_MOC_LITERAL
 
@@ -226,7 +226,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 28: _t->on_VertexLineEdit_textChanged((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 29: _t->on_ParallelButton_clicked(); break;
         case 30: _t->on_CenterButton_clicked(); break;
-        case 31: _t->recordGifFrame(); break;
+        case 31: _t->new_frame(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {

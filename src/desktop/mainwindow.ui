@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>845</width>
+    <width>852</width>
     <height>689</height>
    </rect>
   </property>
@@ -239,12 +239,15 @@
         </property>
        </widget>
        <widget class="QOpenGLWidget" name="openGLWidget">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>190</x>
           <y>10</y>
-          <width>631</width>
-          <height>501</height>
+          <width>640</width>
+          <height>480</height>
          </rect>
         </property>
        </widget>
