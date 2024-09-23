@@ -55,7 +55,7 @@ install:
 	@clear
 	@cd desktop && qmake desktop.pro -o Makefile.viewer
 	@$(MAKE) -C desktop -f Makefile.viewer
-	@mkdir $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)
 	@mv desktop/desktop $(BUILD_DIR)
 .PHONY: install
 

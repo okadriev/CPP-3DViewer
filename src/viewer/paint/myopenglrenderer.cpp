@@ -9,7 +9,7 @@ void MyOpenGLRenderer::initializeGL() {
   // qDebug() << "MyOpenGLRenderer::initializeGL called";
   m_glWidget->makeCurrent();
   initializeOpenGLFunctions();
-  SettingInfo& settings = *settinginfo();
+  SettingInfo &settings = *settinginfo();
   QColor color = get_color();
   glClearColor(color.redF(), color.greenF(), color.blueF(), 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -34,14 +34,16 @@ void MyOpenGLRenderer::initializeGL() {
 
   if (settings.vertex_type) {
     if (settings.vertex_type == 1) {
-      glEnable(GL_POINT_SMOOTH);
+      // glEnable(GL_POINT_SMOOTH);
+      glEnable(GL_POINT_SMOOTH_HINT);
     }
     glPointSize(settings.vertex_size);
     color = get_points_color();
     glColor3f(color.redF(), color.greenF(), color.blueF());
     glDrawArrays(GL_POINTS, 0, fig.points.size() / 3);
     if (settings.vertex_type == 1) {
-      glDisable(GL_POINT_SMOOTH);
+      // glDisable(GL_POINT_SMOOTH);
+      glDisable(GL_POINT_SMOOTH_HINT);
     }
   }
 
