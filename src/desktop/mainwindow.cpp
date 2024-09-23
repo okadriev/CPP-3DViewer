@@ -270,9 +270,7 @@ void MainWindow::on_CenterButton_clicked() {
 }
 
 void MainWindow::updateOpenGLWidget() {
-  qDebug() << "updateOpenGLWidget1";
   openGLWidget->update();
-  qDebug() << "updateOpenGLWidget2";
 }
 
 QPixmap MainWindow::get_screen() {
