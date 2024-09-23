@@ -17,22 +17,19 @@ class Figure {
 
   unsigned int count_points;
   unsigned int count_edges;
+  float min_x, min_y, min_z;
+  float max_x, max_y, max_z;
+
+  void find_min_max_vertices();
+  void convert_shapes_to_edges(const std::vector<tinyobj::shape_t> &shapes);
 
  public:
-  float min_x;
-  float min_y;
-  float min_z;
-  float max_x;
-  float max_y;
-  float max_z;
   std::vector<float> points;
   std::vector<unsigned int> edges;
 
   Figure();
   ~Figure();
 
-  void find_min_max_vertices();
-  void convert_shapes_to_edges(const std::vector<tinyobj::shape_t> &shapes);
   Figure parce(std::string &filename);
   Figure normalize();
 };

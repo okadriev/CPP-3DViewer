@@ -102,10 +102,7 @@ Figure Figure::normalize() {
     Point point = {points[i] - x_center, points[i + 1] - y_center,
                    points[i + 2] - z_center};
 
-    // point.rotate(info->rotate_x, info->rotate_y, info->rotate_z);
-    point.rotateX(info->rotate_x);
-    point.rotateY(info->rotate_y);
-    point.rotateZ(info->rotate_z);
+    point.rotate(info->rotate_x, info->rotate_y, info->rotate_z);
     point.move((info->trans_x - 50.0) / 30 / scale,
                (info->trans_y - 50.0) / 30 / scale,
                (info->trans_z - 50.0) / 30 / scale);

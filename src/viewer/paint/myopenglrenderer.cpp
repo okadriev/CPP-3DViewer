@@ -20,20 +20,9 @@ void MyOpenGLRenderer::initializeGL() {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  GLfloat coef = -1;
-  if (coef < abs(fig.min_x)) coef = abs(fig.min_x);
-  if (coef < abs(fig.min_y)) coef = abs(fig.min_y);
-  if (coef < abs(fig.min_z)) coef = abs(fig.min_z);
-  if (coef < abs(fig.max_x)) coef = abs(fig.max_x);
-  if (coef < abs(fig.max_y)) coef = abs(fig.max_y);
-  if (coef < abs(fig.max_z)) coef = abs(fig.max_z);
   if (settings.projection_type == 0) {
-    glFrustum(-1 * coef, 1 * coef, -1 * coef, 1 * coef, coef, 1000 * coef);
-    glTranslatef(0, 0, -2 * coef);
-    glRotatef(30, 1, 0, 0);
-  } else {
-    glOrtho(-1 * coef, 1 * coef, -1 * coef, 1 * coef, -1 * coef, 1000 * coef);
-    glTranslatef(0, -coef / 2, 0);
+    glFrustum(-1, 1, -1, 1, 1, 1000);
+    glTranslatef(0, 0, -2);
   }
 
   glEnableClientState(GL_VERTEX_ARRAY);
