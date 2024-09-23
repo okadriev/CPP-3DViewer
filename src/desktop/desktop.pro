@@ -1,5 +1,5 @@
 QT += core gui opengl widgets #проверить по одному
-# include(QtGifImage/src/gifimage/qtgifimage.pri)
+include(QtGifImage/src/gifimage/qtgifimage.pri)
 
 #INCLUDEPATH += $$[QT_INSTALL_HEADERS] #проверить вообще нужен ли?
 

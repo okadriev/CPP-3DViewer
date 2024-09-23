@@ -3,12 +3,14 @@
 #include "./ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
+    : QMainWindow(parent), ui(new Ui::MainWindow), gif(QSize(640, 480)) {
   ui->setupUi(this);
   t = new QTimer(this);
+  gif_file = nullptr;
 
   setWindowTitle("3D Viewer");
   ui->MainStackedWidget->setCurrentIndex(I_ONE);
+  connect(t, &QTimer::timeout, this, &MainWindow::new_frame);
 
   setupOpenGL();
   updateInfoLabel();
@@ -36,53 +38,33 @@ void MainWindow::on_SaveButton_clicked() {
 }
 
 void MainWindow::on_ScreenButton_clicked() {
-  QPixmap pixmap = screen();
-  if (!pixmap.isNull()) {
+  QScreen *screen = QGuiApplication::primaryScreen();
+  if (const QWindow *window = windowHandle()) screen = window->screen();
+  if (screen) {
+    QPixmap pixmap = get_screen();
+
     QString defaultName =
         QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") + ".png";
     QString fileName = QFileDialog::getSaveFileName(
         this, tr("Сохранить скриншот"), QDir::homePath() + "/" + defaultName,
         tr("Изображения (*.png *.jpg *.bmp)"));
 
-    if (!fileName.isEmpty()) {
-      pixmap.save(fileName);
-    }
+    if (!fileName.isEmpty()) pixmap.save(fileName);
   }
 }
 
 void MainWindow::on_GifButton_clicked() {
-  // QString defaultName =
-  //     QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") + ".gif";
-  // QString filename =
-  //     QFileDialog::getSaveFileName(this, "Save GIF", "", "GIF Files (*.gif)");
-  // // controller.gif_start(ui->openGLWidget, filename);
+  QString defaultName =
+      QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") + ".gif";
+  gif_file = QFileDialog::getSaveFileName(this, tr("Сохранить gif"),
+                                          QDir::homePath() + "/" + defaultName,
+                                          tr("Gif (*.gif)"));
 
-  // QGifImage gif(QSize(640, 480));
-  // t->setInterval(100);
-  // connect(t, &QTimer::timeout, this, &MainWindow::recordGifFrame);
-  // if (!filename.isEmpty()) {
-  //   gif = QGifImage(QSize(640, 480));
-  //   gif.setDefaultDelay(100);
-  //   frameCounter = 0;
-  //   gifTimer->start();
-  // }
-
-  // gif.save(filename);
+  if (!gif_file.isEmpty()) {
+    ui->GifButton->setEnabled(false);
+    t->start(100);
+  }
 }
-
-void MainWindow::recordGifFrame() {
-  // if (frameCounter < 50) { 
-  //   QImage image = grabOpenGLWidget();
-  //   gif.addFrame(image);
-  //   frameCounter++;
-  // } else {
-  //   t->stop();
-  //   gif.save(gifFilename);
-  //   frameCounter = 0;
-  // }
-}
-
-
 
 void MainWindow::on_BackgroundColorButton_clicked() {
   QColor color = QColorDialog::getColor();
@@ -293,14 +275,36 @@ void MainWindow::updateOpenGLWidget() {
   qDebug() << "updateOpenGLWidget2";
 }
 
-QPixmap MainWindow::screen() {
+QPixmap MainWindow::get_screen() {
   QScreen *screen = QGuiApplication::primaryScreen();
-  if (const QWindow *window = windowHandle()) screen = window->screen();
-  QPixmap pixmap;
-  if (screen)
-    screen->grabWindow(winId(), ui->openGLWidget->x(), ui->openGLWidget->y(),
-                       ui->openGLWidget->width(), ui->openGLWidget->height());
-  return pixmap;
+  const QWindow *window = windowHandle();
+  screen = window ? window->screen() : screen;
+
+  return screen ? screen->grabWindow(winId(), ui->openGLWidget->x() + 9,
+                                     ui->openGLWidget->y() + 9,
+                                     ui->openGLWidget->width(),
+                                     ui->openGLWidget->height())
+                : QPixmap();
+}
+
+void MainWindow::new_frame() {
+  static int counter = 0;
+  QPixmap pixmap = get_screen();
+  if (!pixmap.isNull()) {
+    QImage image = pixmap.toImage();
+    gif.addFrame(image);
+    gif.setDefaultDelay(100);
+  }
+  counter++;
+
+  if (counter == 50) {
+    counter = 0;
+    gif.save(gif_file);
+    QMessageBox::information(this, tr("Уведомление"),
+                             tr("Запись gif завершена"));
+    t->stop();
+    ui->GifButton->setEnabled(true);
+  }
 }
 
 void MainWindow::updateInfoLabel() {
