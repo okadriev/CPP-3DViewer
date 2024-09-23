@@ -84,10 +84,3 @@ std::unique_ptr<std::string> Controller::get_filename() {
              ? std::make_unique<std::string>(*model_info->filename)
              : nullptr;
 };
-
-// void Controller::gif_start(QOpenGLWidget* openGLWidget, QString filename) {
-//   // if (!filename.isEmpty()) {
-//   //   GifRecorder recorder(ui->openGLWidget);
-//   //   recorder.startRecord(filename);
-//   // }
-// }

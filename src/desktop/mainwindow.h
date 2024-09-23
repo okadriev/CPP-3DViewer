@@ -71,16 +71,22 @@ class MainWindow : public QMainWindow {
  private:
   Ui::MainWindow *ui;
   Controller controller;
+
+//для временного хранения цвета
   std::unique_ptr<std::string> temp;
+
+//для отрисовки
   QOpenGLWidget *openGLWidget;
   MyOpenGLRenderer *m_renderer;
+
+//для гиф
   QTimer *t;
   QGifImage gif;
   QString gif_file;
 
   QPixmap get_screen();
   void setupOpenGL();
-  void setupConnections();
+  // void setupConnections();
   void updateOpenGLWidget();
   void updateInfoLabel();
   void update_edges();
@@ -90,7 +96,9 @@ class MainWindow : public QMainWindow {
   void update_scale();
 };
 
+//перечисления для номера окна
 typedef enum { I_ONE, I_TWO, I_THREE } IndexType;
+
 // перечисление для типа проекции
 typedef enum { V_PARALLEL, V_CENTER } ProjectType;
 

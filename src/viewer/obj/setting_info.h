@@ -9,7 +9,9 @@
 
 class SettingInfo {
  public:
+  // инициализация SettingInfo
   SettingInfo();
+  // сохранение SettingInfo в файл
   void save_settings();
 
   int projection_type;

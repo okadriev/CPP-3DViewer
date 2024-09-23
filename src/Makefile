@@ -6,8 +6,7 @@ TEST_FILES = $(wildcard ) 																   ##ДОБАВИТЬ ФАЙЛЫ КО�
 TEST_FILES_OBJ = $(patsubst %.cpp,%.o,$(TEST_FILES))
 TEST_EXEC = tests/test
 
-# GIF_FLAGS = -lgif
-# GTK_CAIRO_FLAGS = `pkg-config --cflags --libs gtk+-3.0 cairo`
+
 GIF_FLAG = -lgif
 GFLAG = -fprofile-arcs -ftest-coverage
 TFLAG = -lcheck -lsubunit -lm
@@ -18,15 +17,15 @@ MAIN_OBJ= $(patsubst %.cpp,%.o,$(MAIN_SRC))
 
 VIEW_SRC= $(wildcard ./desktop/*.cpp )
 VIEW_OBJ= $(patsubst %.cpp,%.o,$(VIEW_SRC))
-VIEW_LIB = view.a
+VIEW_LIB = s21_view.a
 
 CNTRL_SRC= $(wildcard ./controller/*.cpp )
 CNTRL_OBJ= $(patsubst %.cpp,%.o,$(CNTRL_SRC))
-CNTRL_LIB = controller.a
+CNTRL_LIB = s21_controller.a
 
 MODEL_SRC = $(wildcard ./viewer/*/*.cpp )
 MODEL_OBJ = $(SCREEN_SRC:.cpp=.o)
-MODEL_LIB = model.a
+MODEL_LIB = s21_model.a
 
 BUILD_DIR = build
 EXEC = desktop
@@ -57,6 +56,7 @@ install:
 	@$(MAKE) -C desktop -f Makefile.viewer
 	@mkdir -p $(BUILD_DIR)
 	@mv desktop/desktop $(BUILD_DIR)
+	@rm -f $(CNTRL_OBJ) $(MODEL_OBJ) $(VIEW_OBJ) $(MAIN_OBJ) desktop/*.o
 .PHONY: install
 
 run: install
@@ -84,7 +84,7 @@ dvi:
 
 dist: install
 	@clear
-	@tar -cvzf breack_game.tgz $(BUILD_DIR)
+	@tar -cvzf 3d_viewer_2.0.tgz $(BUILD_DIR)
 .PHONY: dist
 
 gcov_report: clean
@@ -105,22 +105,28 @@ leak_check:
 	@valgrind --tool=memcheck --leak-check=yes ./$(TEST_EXEC)
 .PHONY: leak_check
 
-# cpp_check: 
-# 	@clear
-# 	@cppcheck --enable=all --suppress=missingIncludeSystem --language=c++ $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC)
-# .PHONY: cpp_check
+style_check: 
+	@clear
+	@cppcheck --enable=all --suppress=missingIncludeSystem --language=c++ $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC) $(CNTRL_SRC)
+.PHONY: cpp_check
 
-# clang_check:
-# 	@clear
-# 	@cp ../materials/linters/.clang-format .
-# 	@clang-format -n $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC)
-# .PHONY: clang_check
+google_check:
+	@clear
+	@cp ../materials/linters/.clang-format .
+	@clang-format -n $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC) $(CNTRL_SRC)
+.PHONY: clang_check
+
+g_edit:
+	@clear
+	@cp ../materials/linters/.clang-format .
+	@clang-format -i $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC) $(CNTRL_SRC)
+.PHONY: clang_check
 
 clean:
 	@rm -f $(TEST_OBJ) $(TEST_EXEC)
 	@rm -rf $(BUILD_DIR) latex html */*.o
-	@rm -f $(VIEW_LIB) $(MODEL_LIB)
-	@rm -rf coverage_report gcov_r Doxyfile README.md
+	@rm -f $(VIEW_LIB) $(MODEL_LIB) $(CNTRL_LIB)
+	@rm -rf coverage_report gcov_r Doxyfile README.md setting.txt
 	@rm -f desktop/Makefile.viewer desktop/.qmake.stash desktop/ui_mainwindow.h desktop/*.user desktop/moc*
 .PHONY: clean
 

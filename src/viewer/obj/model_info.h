@@ -6,7 +6,9 @@
 
 class ModelInfo {
  public:
+  // инициализация ModelInfo
   ModelInfo();
+  // обновление ModelInfo
   void zero_model_info();
 
   std::unique_ptr<std::string> filename;
@@ -17,6 +19,6 @@ class ModelInfo {
   int scale;
 };
 
-#include "../paint/figure.h" // починить костыль
+#include "../paint/figure.h"  // починить костыль
 
 #endif  // MODELINFO_H
