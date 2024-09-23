@@ -33,23 +33,23 @@ EXEC = desktop
 
 all: install run
 
-$(VIEW_LIB): $(VIEW_OBJ)
-	@ar rcs $(VIEW_LIB) $(VIEW_OBJ) 
-	@ranlib $(VIEW_LIB)
-	@rm -f $(VIEW_OBJ) 
-.PHONY: $(VIEW_LIB)
+# $(VIEW_LIB): $(VIEW_OBJ)
+# 	@ar rcs $(VIEW_LIB) $(VIEW_OBJ) 
+# 	@ranlib $(VIEW_LIB)
+# 	@rm -f $(VIEW_OBJ) 
+# .PHONY: $(VIEW_LIB)
 
-$(CNTRL_LIB): $(CNTRL_OBJ)
-	@ar rcs $(CNTRL_LIB) $(CNTRL_OBJ) 
-	@ranlib $(CNTRL_LIB)
-	@rm -f $(CNTRL_OBJ) 
-.PHONY: $(CNTRL_LIB)
+# $(CNTRL_LIB): $(CNTRL_OBJ)
+# 	@ar rcs $(CNTRL_LIB) $(CNTRL_OBJ) 
+# 	@ranlib $(CNTRL_LIB)
+# 	@rm -f $(CNTRL_OBJ) 
+# .PHONY: $(CNTRL_LIB)
 
-$(MODEL_LIB): $(MODEL_OBJ) 
-	@ar rcs $(MODEL_LIB) $(MODEL_OBJ) 
-	@ranlib $(MODEL_LIB)
-	@rm -f $(MODEL_OBJ) 
-.PHONY: $(MODEL_LIB)
+# $(MODEL_LIB): $(MODEL_OBJ) 
+# 	@ar rcs $(MODEL_LIB) $(MODEL_OBJ) 
+# 	@ranlib $(MODEL_LIB)
+# 	@rm -f $(MODEL_OBJ) 
+# .PHONY: $(MODEL_LIB)
 
 install:
 	@clear
@@ -121,7 +121,7 @@ clean:
 	@rm -rf $(BUILD_DIR) latex html */*.o
 	@rm -f $(VIEW_LIB) $(MODEL_LIB)
 	@rm -rf coverage_report gcov_r Doxyfile README.md
-	@rm -f desktop/Makefile.viewer desktop/.qmake.stash desktop/ui_mainwindow.h desktop/*.user
+	@rm -f desktop/Makefile.viewer desktop/.qmake.stash desktop/ui_mainwindow.h desktop/*.user desktop/moc*
 .PHONY: clean
 
 test: clean $(TEST_OBJ)
