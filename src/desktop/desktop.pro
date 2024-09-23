@@ -1,4 +1,5 @@
-QT += core gui opengl widgets  #проверить по одному
+QT += core gui opengl widgets #проверить по одному
+# include(QtGifImage/src/gifimage/qtgifimage.pri)
 
 INCLUDEPATH += $$[QT_INSTALL_HEADERS] #проверить вообще нужен ли?
 
@@ -15,7 +16,6 @@ SOURCES += \
     ../3d_viewer_2.0.cpp \
     ../controller/controller.cpp \
     ../viewer/paint/figure.cpp \
-    ../viewer/gif/gif.cpp \
     ../viewer/obj/model_info.cpp \
     ../viewer/obj/setting_info.cpp \
     ../viewer/obj/obj.cpp \
@@ -26,7 +26,6 @@ HEADERS += \
     mainwindow.h \
     ../controller/controller.h \
     ../viewer/paint/figure.h \
-    ../viewer/gif/gif.hpp \
     ../viewer/obj/obj.hpp \
     ../viewer/obj/model_info.h \
     ../viewer/obj/setting_info.h \

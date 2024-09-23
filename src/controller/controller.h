@@ -38,7 +38,7 @@ class Controller {
   int get_vertex_size() { return setting_info->vertex_size; };
   int get_projection_type() { return setting_info->projection_type; };
 
-  void gif_start(QOpenGLWidget *openGLWidget, QString filename);
+  // void gif_start(QOpenGLWidget *openGLWidget, QString filename);
 
  private:
   ModelInfo *model_info;

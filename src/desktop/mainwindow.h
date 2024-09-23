@@ -11,7 +11,9 @@
 #include <QPixmap>
 #include <QScreen>
 #include <QScrollBar>
+#include <QTimer>
 #include <QWindow>
+// #include "QtGifImage/include/QtGifImage/qgifimage.h"
 #include <filesystem>
 #include <string>
 
@@ -63,6 +65,7 @@ class MainWindow : public QMainWindow {
   void on_VertexLineEdit_textChanged(const QString &text);
   void on_ParallelButton_clicked();
   void on_CenterButton_clicked();
+  void recordGifFrame();
 
  private:
   Ui::MainWindow *ui;
@@ -70,12 +73,18 @@ class MainWindow : public QMainWindow {
   std::unique_ptr<std::string> temp;
   QOpenGLWidget *openGLWidget;
   MyOpenGLRenderer *m_renderer;
+  QTimer *t;
 
   void setupOpenGL();
-
+  QPixmap screen();
   void setupConnections();
   void updateOpenGLWidget();
   void updateInfoLabel();
+  void update_edges();
+  void update_vertex();
+  void update_trans();
+  void update_rotate();
+  void update_scale();
 };
 
 typedef enum { I_ONE, I_TWO, I_THREE } IndexType;

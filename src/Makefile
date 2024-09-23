@@ -29,7 +29,7 @@ MODEL_OBJ = $(SCREEN_SRC:.cpp=.o)
 MODEL_LIB = model.a
 
 BUILD_DIR = build
-EXEC = 3D_Viewer_2.0
+EXEC = desktop
 
 all: install run
 
@@ -55,8 +55,8 @@ install:
 	@clear
 	@cd desktop && qmake desktop.pro -o Makefile.viewer
 	@$(MAKE) -C desktop -f Makefile.viewer
-	@mv desktop/desktop $(BUILD_DIR)/$(EXEC)
-	@./$(BUILD_DIR)/$(EXEC)
+	@mkdir $(BUILD_DIR)
+	@mv desktop/desktop $(BUILD_DIR)
 .PHONY: install
 
 run: install

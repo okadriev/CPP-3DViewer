@@ -5,15 +5,24 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  t = new QTimer(this);
 
   setWindowTitle("3D Viewer");
   ui->MainStackedWidget->setCurrentIndex(I_ONE);
 
   setupOpenGL();
   updateInfoLabel();
+  update_edges();
+  update_vertex();
+  update_trans();
+  update_rotate();
+  update_scale();
 }
 
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow() {
+  delete ui;
+  delete t;
+}
 
 void MainWindow::on_OpenFileButton_clicked() {
   QString fileName = QFileDialog::getOpenFileName(this, "Открыть файл", "",
@@ -27,13 +36,8 @@ void MainWindow::on_SaveButton_clicked() {
 }
 
 void MainWindow::on_ScreenButton_clicked() {
-  QScreen *screen = QGuiApplication::primaryScreen();
-  if (const QWindow *window = windowHandle()) screen = window->screen();
-  if (screen) {
-    QPixmap pixmap = screen->grabWindow(
-        winId(), ui->openGLWidget->x(), ui->openGLWidget->y(),
-        ui->openGLWidget->width(), ui->openGLWidget->height());
-
+  QPixmap pixmap = screen();
+  if (!pixmap.isNull()) {
     QString defaultName =
         QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") + ".png";
     QString fileName = QFileDialog::getSaveFileName(
@@ -47,10 +51,38 @@ void MainWindow::on_ScreenButton_clicked() {
 }
 
 void MainWindow::on_GifButton_clicked() {
-  QString filename =
-      QFileDialog::getSaveFileName(this, "Save GIF", "", "GIF Files (*.gif)");
-  controller.gif_start(ui->openGLWidget, filename);
+  // QString defaultName =
+  //     QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") + ".gif";
+  // QString filename =
+  //     QFileDialog::getSaveFileName(this, "Save GIF", "", "GIF Files (*.gif)");
+  // // controller.gif_start(ui->openGLWidget, filename);
+
+  // QGifImage gif(QSize(640, 480));
+  // t->setInterval(100);
+  // connect(t, &QTimer::timeout, this, &MainWindow::recordGifFrame);
+  // if (!filename.isEmpty()) {
+  //   gif = QGifImage(QSize(640, 480));
+  //   gif.setDefaultDelay(100);
+  //   frameCounter = 0;
+  //   gifTimer->start();
+  // }
+
+  // gif.save(filename);
 }
+
+void MainWindow::recordGifFrame() {
+  // if (frameCounter < 50) { 
+  //   QImage image = grabOpenGLWidget();
+  //   gif.addFrame(image);
+  //   frameCounter++;
+  // } else {
+  //   t->stop();
+  //   gif.save(gifFilename);
+  //   frameCounter = 0;
+  // }
+}
+
+
 
 void MainWindow::on_BackgroundColorButton_clicked() {
   QColor color = QColorDialog::getColor();
@@ -59,10 +91,12 @@ void MainWindow::on_BackgroundColorButton_clicked() {
 
 void MainWindow::on_VertexButton_clicked() {
   ui->MainStackedWidget->setCurrentIndex(I_THREE);
+  update_vertex();
 }
 
 void MainWindow::on_EdgesButton_clicked() {
   ui->MainStackedWidget->setCurrentIndex(I_TWO);
+  update_edges();
 }
 
 void MainWindow::on_TransposeScrollBar_x_valueChanged(int value) {
@@ -134,7 +168,7 @@ void MainWindow::on_RotateScrollBar_z_valueChanged(int value) {
 void MainWindow::on_RotateLineEdit_x_textChanged(const QString &text) {
   bool ok;
   int value = text.toInt(&ok);
-  if (ok && value >= 0 && value <= 100) {
+  if (ok && value >= 0 && value <= 360) {
     ui->RotateScrollBar_x->setValue(value);
     controller.update_model_info('r', 'x', value);
     updateInfoLabel();
@@ -144,7 +178,7 @@ void MainWindow::on_RotateLineEdit_x_textChanged(const QString &text) {
 void MainWindow::on_RotateLineEdit_y_textChanged(const QString &text) {
   bool ok;
   int value = text.toInt(&ok);
-  if (ok && value >= 0 && value <= 100) {
+  if (ok && value >= 0 && value <= 360) {
     ui->RotateScrollBar_y->setValue(value);
     controller.update_model_info('r', 'y', value);
     updateInfoLabel();
@@ -154,7 +188,7 @@ void MainWindow::on_RotateLineEdit_y_textChanged(const QString &text) {
 void MainWindow::on_RotateLineEdit_z_textChanged(const QString &text) {
   bool ok;
   int value = text.toInt(&ok);
-  if (ok && value >= 0 && value <= 100) {
+  if (ok && value >= 0 && value <= 360) {
     ui->RotateScrollBar_z->setValue(value);
     controller.update_model_info('r', 'z', value);
     updateInfoLabel();
@@ -183,6 +217,9 @@ void MainWindow::on_CancelEdgesButton_clicked(QAbstractButton *button) {
       ui->SolidEdgesRadioButton->isChecked(), std::move(temp),
       ui->SizeEdgesScrollBar->value());
   updateInfoLabel();
+  update_trans();
+  update_rotate();
+  update_scale();
   ui->MainStackedWidget->setCurrentIndex(I_ONE);
 }
 
@@ -190,7 +227,6 @@ void MainWindow::on_ColorEdgesButton_clicked() {
   QColor color = QColorDialog::getColor();
   if (color.isValid()) {
     QString colorStr = color.name();
-    ui->EdgesLineEdit->setText(colorStr);
     temp = std::make_unique<std::string>(colorStr.toStdString());
   }
 }
@@ -215,6 +251,9 @@ void MainWindow::on_CancelVertexButton_clicked(QAbstractButton *button) {
       ui->SquareVertexRadioButton->isChecked(), std::move(temp),
       ui->SizeVertexScrollBar->value());
   updateInfoLabel();
+  update_trans();
+  update_rotate();
+  update_scale();
   ui->MainStackedWidget->setCurrentIndex(I_ONE);
 }
 
@@ -222,7 +261,6 @@ void MainWindow::on_ColorVertexButton_clicked() {
   QColor color = QColorDialog::getColor();
   if (color.isValid()) {
     QString colorStr = color.name();
-    ui->VertexLineEdit->setText(colorStr);
     temp = std::make_unique<std::string>(colorStr.toStdString());
   }
 }
@@ -253,6 +291,16 @@ void MainWindow::updateOpenGLWidget() {
   qDebug() << "updateOpenGLWidget1";
   openGLWidget->update();
   qDebug() << "updateOpenGLWidget2";
+}
+
+QPixmap MainWindow::screen() {
+  QScreen *screen = QGuiApplication::primaryScreen();
+  if (const QWindow *window = windowHandle()) screen = window->screen();
+  QPixmap pixmap;
+  if (screen)
+    screen->grabWindow(winId(), ui->openGLWidget->x(), ui->openGLWidget->y(),
+                       ui->openGLWidget->width(), ui->openGLWidget->height());
+  return pixmap;
 }
 
 void MainWindow::updateInfoLabel() {
@@ -290,6 +338,39 @@ void MainWindow::updateInfoLabel() {
   info += QString("Размер вершин: %1\n").arg(controller.get_vertex_size());
 
   ui->InfoLabel->setText(info);
+}
+
+void MainWindow::update_edges() {
+  ui->SizeEdgesScrollBar->setValue(controller.get_edge_thickness());
+  ui->EdgesLineEdit->setText(QString::number(controller.get_edge_thickness()));
+}
+
+void MainWindow::update_vertex() {
+  ui->SizeVertexScrollBar->setValue(controller.get_vertex_size());
+  ui->VertexLineEdit->setText(QString::number(controller.get_vertex_size()));
+}
+
+void MainWindow::update_trans() {
+  ui->TransposeScrollBar_x->setValue(controller.get_trans_x());
+  ui->TransposeLineEdit_x->setText(QString::number(controller.get_trans_x()));
+  ui->TransposeScrollBar_y->setValue(controller.get_trans_y());
+  ui->TransposeLineEdit_y->setText(QString::number(controller.get_trans_y()));
+  ui->TransposeScrollBar_z->setValue(controller.get_trans_z());
+  ui->TransposeLineEdit_z->setText(QString::number(controller.get_trans_z()));
+}
+
+void MainWindow::update_rotate() {
+  ui->RotateScrollBar_x->setValue(controller.get_rotate_x());
+  ui->RotateLineEdit_x->setText(QString::number(controller.get_rotate_x()));
+  ui->RotateScrollBar_y->setValue(controller.get_rotate_y());
+  ui->RotateLineEdit_y->setText(QString::number(controller.get_rotate_y()));
+  ui->RotateScrollBar_z->setValue(controller.get_rotate_z());
+  ui->RotateLineEdit_z->setText(QString::number(controller.get_rotate_z()));
+}
+
+void MainWindow::update_scale() {
+  ui->ScaleScrollBar->setValue(controller.get_scale());
+  ui->ScaleLineEdit->setText(QString::number(controller.get_scale()));
 }
 
 void MainWindow::setupConnections() {
