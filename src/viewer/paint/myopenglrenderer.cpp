@@ -7,6 +7,7 @@ MyOpenGLRenderer::MyOpenGLRenderer(QOpenGLWidget *glWidget, QObject *parent)
 
 void MyOpenGLRenderer::initializeGL() {
   // qDebug() << "MyOpenGLRenderer::initializeGL called";
+
   m_glWidget->makeCurrent();
   initializeOpenGLFunctions();
   SettingInfo &settings = *settinginfo();
@@ -19,16 +20,21 @@ void MyOpenGLRenderer::initializeGL() {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  /* if (this->projection_type == 0) {
-    glFrustum(-1 * normalize_coef, 1 * normalize_coef, -1 * normalize_coef,
-              1 * normalize_coef, normalize_coef, 1000 * normalize_coef);
-    glTranslatef(0, 0, -2 * normalize_coef);
+  GLfloat coef = -1;
+  if (coef < abs(fig.min_x)) coef = abs(fig.min_x);
+  if (coef < abs(fig.min_y)) coef = abs(fig.min_y);
+  if (coef < abs(fig.min_z)) coef = abs(fig.min_z);
+  if (coef < abs(fig.max_x)) coef = abs(fig.max_x);
+  if (coef < abs(fig.max_y)) coef = abs(fig.max_y);
+  if (coef < abs(fig.max_z)) coef = abs(fig.max_z);
+  if (settings.projection_type == 0) {
+    glFrustum(-1 * coef, 1 * coef, -1 * coef, 1 * coef, coef, 1000 * coef);
+    glTranslatef(0, 0, -2 * coef);
     glRotatef(30, 1, 0, 0);
   } else {
-    glOrtho(-1 * normalize_coef, 1 * normalize_coef, -1 * normalize_coef,
-            1 * normalize_coef, -1 * normalize_coef, 1000 * normalize_coef);
-    glTranslatef(0, -normalize_coef / 2, 0);
-  } */ //проекция
+    glOrtho(-1 * coef, 1 * coef, -1 * coef, 1 * coef, -1 * coef, 1000 * coef);
+    glTranslatef(0, -coef / 2, 0);
+  }
 
   glEnableClientState(GL_VERTEX_ARRAY);
 

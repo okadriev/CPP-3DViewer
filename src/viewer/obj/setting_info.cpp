@@ -33,7 +33,7 @@ SettingInfo::SettingInfo() {
     f.close();
 
   } else {
-    projection_type = 0;
+    projection_type = 1;
     edges_type = 0;
     edge_color = std::make_unique<std::string>("#ffffff");
     edge_thickness = 5;
