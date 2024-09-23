@@ -13,7 +13,8 @@
 #include <QScrollBar>
 #include <QTimer>
 #include <QWindow>
-// #include "QtGifImage/include/QtGifImage/qgifimage.h"
+#include <QThread>
+#include "QtGifImage/include/QtGifImage/qgifimage.h"
 #include <filesystem>
 #include <string>
 
@@ -65,7 +66,7 @@ class MainWindow : public QMainWindow {
   void on_VertexLineEdit_textChanged(const QString &text);
   void on_ParallelButton_clicked();
   void on_CenterButton_clicked();
-  void recordGifFrame();
+  // void recordGifFrame();
 
  private:
   Ui::MainWindow *ui;
@@ -76,7 +77,6 @@ class MainWindow : public QMainWindow {
   QTimer *t;
 
   void setupOpenGL();
-  QPixmap screen();
   void setupConnections();
   void updateOpenGLWidget();
   void updateInfoLabel();

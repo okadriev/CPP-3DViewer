@@ -36,53 +36,59 @@ void MainWindow::on_SaveButton_clicked() {
 }
 
 void MainWindow::on_ScreenButton_clicked() {
-  QPixmap pixmap = screen();
-  if (!pixmap.isNull()) {
+  QScreen *screen = QGuiApplication::primaryScreen();
+  if (const QWindow *window = windowHandle()) screen = window->screen();
+  if (screen) {
+    QPixmap pixmap = screen->grabWindow(
+        winId(), ui->openGLWidget->x(), ui->openGLWidget->y(),
+        ui->openGLWidget->width(), ui->openGLWidget->height());
+
     QString defaultName =
         QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") + ".png";
     QString fileName = QFileDialog::getSaveFileName(
         this, tr("Сохранить скриншот"), QDir::homePath() + "/" + defaultName,
         tr("Изображения (*.png *.jpg *.bmp)"));
 
-    if (!fileName.isEmpty()) {
-      pixmap.save(fileName);
-    }
+    if (!fileName.isEmpty()) pixmap.save(fileName);
   }
 }
 
 void MainWindow::on_GifButton_clicked() {
-  // QString defaultName =
-  //     QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") + ".gif";
-  // QString filename =
-  //     QFileDialog::getSaveFileName(this, "Save GIF", "", "GIF Files (*.gif)");
-  // // controller.gif_start(ui->openGLWidget, filename);
+  QString defaultName =
+      QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") + ".gif";
+  QString filename = QFileDialog::getSaveFileName(
+      this, tr("Сохранить gif"), QDir::homePath() + "/" + defaultName,
+      tr("Gif (*.gif)"));
+  ui->GifButton->setEnabled(false);
 
-  // QGifImage gif(QSize(640, 480));
-  // t->setInterval(100);
-  // connect(t, &QTimer::timeout, this, &MainWindow::recordGifFrame);
-  // if (!filename.isEmpty()) {
-  //   gif = QGifImage(QSize(640, 480));
-  //   gif.setDefaultDelay(100);
-  //   frameCounter = 0;
-  //   gifTimer->start();
-  // }
+  if (!filename.isEmpty()) {
+    QGifImage gif(QSize(640, 480));
+    connect(t, &QTimer::timeout, this, [this, &gif, filename]() {
+      static int counter = 0;
+      QScreen *screen = QGuiApplication::primaryScreen();
+      if (const QWindow *window = windowHandle()) screen = window->screen();
+      if (screen) {
+        QPixmap pixmap = screen->grabWindow(
+            winId(), ui->openGLWidget->x(), ui->openGLWidget->y(),
+            ui->openGLWidget->width(), ui->openGLWidget->height());
+        QImage image = pixmap.toImage();
+        gif.addFrame(image);
+        gif.setDefaultDelay(100);
+      }
+      counter++;
+      if (counter == 50) {
+        gif.save(filename);
+        QMessageBox::information(this, tr("Уведомление"),
+                                 tr("Запись gif завершена"));
+        t->stop();
+      }
+    });
 
-  // gif.save(filename);
+    t->start(100);
+  }
+
+  ui->GifButton->setEnabled(true);
 }
-
-void MainWindow::recordGifFrame() {
-  // if (frameCounter < 50) { 
-  //   QImage image = grabOpenGLWidget();
-  //   gif.addFrame(image);
-  //   frameCounter++;
-  // } else {
-  //   t->stop();
-  //   gif.save(gifFilename);
-  //   frameCounter = 0;
-  // }
-}
-
-
 
 void MainWindow::on_BackgroundColorButton_clicked() {
   QColor color = QColorDialog::getColor();
@@ -291,16 +297,6 @@ void MainWindow::updateOpenGLWidget() {
   qDebug() << "updateOpenGLWidget1";
   openGLWidget->update();
   qDebug() << "updateOpenGLWidget2";
-}
-
-QPixmap MainWindow::screen() {
-  QScreen *screen = QGuiApplication::primaryScreen();
-  if (const QWindow *window = windowHandle()) screen = window->screen();
-  QPixmap pixmap;
-  if (screen)
-    screen->grabWindow(winId(), ui->openGLWidget->x(), ui->openGLWidget->y(),
-                       ui->openGLWidget->width(), ui->openGLWidget->height());
-  return pixmap;
 }
 
 void MainWindow::updateInfoLabel() {
