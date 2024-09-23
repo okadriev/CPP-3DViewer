@@ -1,10 +1,9 @@
 QT += core gui opengl widgets #проверить по одному
 # include(QtGifImage/src/gifimage/qtgifimage.pri)
 
-INCLUDEPATH += $$[QT_INSTALL_HEADERS] #проверить вообще нужен ли?
+#INCLUDEPATH += $$[QT_INSTALL_HEADERS] #проверить вообще нужен ли?
 
-#greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+equals(QT_MAJOR_VERSION, 6): QT += openglwidgets
 CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
