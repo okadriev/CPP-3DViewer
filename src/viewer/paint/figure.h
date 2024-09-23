@@ -17,14 +17,14 @@ class Figure {
 
   unsigned int count_points;
   unsigned int count_edges;
+
+ public:
   float min_x;
   float min_y;
   float min_z;
   float max_x;
   float max_y;
   float max_z;
-
- public:
   std::vector<float> points;
   std::vector<unsigned int> edges;
 
