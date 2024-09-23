@@ -28,25 +28,26 @@ void MyOpenGLRenderer::initializeGL() {
   glEnableClientState(GL_VERTEX_ARRAY);
 
   if (settings.vertex_type) {
-    if (settings.vertex_type == 1) {
-      // glEnable(GL_POINT_SMOOTH);
-      glEnable(GL_POINT_SMOOTH_HINT);
-    }
+    // if (settings.vertex_type == 1) {
+    //   // glEnable(GL_POINT_SMOOTH);
+    //   glEnable(GL_POINT_SMOOTH_HINT);
+    // }
     glPointSize(settings.vertex_size);
     color = get_points_color();
     glColor3f(color.redF(), color.greenF(), color.blueF());
     glDrawArrays(GL_POINTS, 0, fig.points.size() / 3);
-    if (settings.vertex_type == 1) {
-      // glDisable(GL_POINT_SMOOTH);
-      glDisable(GL_POINT_SMOOTH_HINT);
-    }
+    // if (settings.vertex_type == 1) {
+    //   // glDisable(GL_POINT_SMOOTH);
+    //   glDisable(GL_POINT_SMOOTH_HINT);
+    // }
   }
 
   if (settinginfo()->edges_type) {
     glEnable(GL_LINE_STIPPLE);
     glLineStipple(1, 0x00FF);
   }
-  glLineWidth(get_line_thickness());
+  // glLineWidth(get_line_thickness());
+  glLineWidth(settinginfo()->edge_thickness);
   color = get_edge_color();
   glColor3f(color.redF(), color.greenF(), color.blueF());
   glDrawElements(GL_LINES, fig.edges.size(), GL_UNSIGNED_INT, fig.edges.data());
@@ -87,16 +88,20 @@ QColor MyOpenGLRenderer::get_points_color() {
              : QColor();
 }
 
-float MyOpenGLRenderer::get_line_thickness() {
-  GLfloat lineWidthRange[2];
-  GLfloat lineWidthGranularity;
+// float MyOpenGLRenderer::get_line_thickness() {
+//   GLfloat lineWidthRange[2];
+//   GLfloat lineWidthGranularity;
 
-  glGetFloatv(GL_LINE_WIDTH_RANGE, lineWidthRange);
-  glGetFloatv(GL_LINE_WIDTH_GRANULARITY, &lineWidthGranularity);
+//   glGetFloatv(GL_LINE_WIDTH_RANGE, lineWidthRange);
+//   glGetFloatv(GL_LINE_WIDTH_GRANULARITY, &lineWidthGranularity);
+//   qDebug() << "lineWidthRange[0]: " << lineWidthRange[0]
+//            << " lineWidthRange[1]: " << lineWidthRange[1]
+//            << " settinginfo()->edge_thickness: "
+//            << settinginfo()->edge_thickness;
+//            thickness = settinginfo()->edge_thickness;
+//   float thickness = (lineWidthRange[1] - lineWidthRange[0]) /
+//                         lineWidthGranularity * settinginfo()->edge_thickness +
+//                     lineWidthRange[0];
 
-  float thickness = (lineWidthRange[1] - lineWidthRange[0]) /
-                        lineWidthGranularity * settinginfo()->edge_thickness +
-                    lineWidthRange[0];
-
-  return thickness;
-}
+//   return thickness;
+// }

@@ -6,7 +6,6 @@ TEST_FILES = $(wildcard ) 																   ##ДОБАВИТЬ ФАЙЛЫ КО�
 TEST_FILES_OBJ = $(patsubst %.cpp,%.o,$(TEST_FILES))
 TEST_EXEC = tests/test
 
-
 GIF_FLAG = -lgif
 GFLAG = -fprofile-arcs -ftest-coverage
 TFLAG = -lcheck -lsubunit -lm
@@ -28,7 +27,7 @@ MODEL_OBJ = $(SCREEN_SRC:.cpp=.o)
 MODEL_LIB = s21_model.a
 
 BUILD_DIR = build
-EXEC = desktop
+EXEC = 3D_Viewer_2.0
 
 all: install run
 
@@ -55,7 +54,7 @@ install:
 	@cd desktop && qmake desktop.pro -o Makefile.viewer
 	@$(MAKE) -C desktop -f Makefile.viewer
 	@mkdir -p $(BUILD_DIR)
-	@mv desktop/desktop $(BUILD_DIR)
+	@mv desktop/desktop $(BUILD_DIR)/$(EXEC)
 	@rm -f $(CNTRL_OBJ) $(MODEL_OBJ) $(VIEW_OBJ) $(MAIN_OBJ) desktop/*.o
 .PHONY: install
 
@@ -124,10 +123,10 @@ g_edit:
 
 clean:
 	@rm -f $(TEST_OBJ) $(TEST_EXEC)
-	@rm -rf $(BUILD_DIR) latex html */*.o
-	@rm -f $(VIEW_LIB) $(MODEL_LIB) $(CNTRL_LIB)
+	@rm -rf latex html */*.o
 	@rm -rf coverage_report gcov_r Doxyfile README.md setting.txt
-	@rm -f desktop/Makefile.viewer desktop/.qmake.stash desktop/ui_mainwindow.h desktop/*.user desktop/moc*
+	@rm -f desktop/Makefile.viewer desktop/.qmake.stash 
+	@rm -f desktop/ui_mainwindow.h desktop/*.user desktop/moc*
 .PHONY: clean
 
 test: clean $(TEST_OBJ)

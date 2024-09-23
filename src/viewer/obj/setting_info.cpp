@@ -36,7 +36,7 @@ SettingInfo::SettingInfo() {
     projection_type = 1;
     edges_type = 0;
     edge_color = std::make_unique<std::string>("#ffffff");
-    edge_thickness = 5;
+    edge_thickness = 1;
     background_color = NULL;
     vertex_type = 0;
     vertex_color = std::make_unique<std::string>("#ffffff");
