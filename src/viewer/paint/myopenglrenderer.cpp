@@ -100,7 +100,8 @@ QColor MyOpenGLRenderer::get_points_color() {
 //            << settinginfo()->edge_thickness;
 //            thickness = settinginfo()->edge_thickness;
 //   float thickness = (lineWidthRange[1] - lineWidthRange[0]) /
-//                         lineWidthGranularity * settinginfo()->edge_thickness +
+//                         lineWidthGranularity * settinginfo()->edge_thickness
+//                         +
 //                     lineWidthRange[0];
 
 //   return thickness;

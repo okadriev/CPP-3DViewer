@@ -81,7 +81,7 @@ class MainWindow : public QMainWindow {
 
 //для гиф
   QTimer *t;
-  QGifImage gif;
+  QGifImage *gif;
   QString gif_file;
 
   QPixmap get_screen();

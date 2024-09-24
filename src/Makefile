@@ -121,7 +121,7 @@ g_edit:
 	@clang-format -i $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC) $(CNTRL_SRC)
 .PHONY: clang_check
 
-clean:
+clean: uninstall
 	@rm -f $(TEST_OBJ) $(TEST_EXEC)
 	@rm -rf latex html */*.o
 	@rm -rf coverage_report gcov_r Doxyfile README.md setting.txt

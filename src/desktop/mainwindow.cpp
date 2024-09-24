@@ -3,7 +3,7 @@
 #include "./ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow), gif(QSize(640, 480)) {
+    : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   t = new QTimer(this);
   gif_file = nullptr;
@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {
   delete ui;
   delete t;
+  if (gif) delete gif;
 }
 
 void MainWindow::on_OpenFileButton_clicked() {
@@ -61,11 +62,10 @@ void MainWindow::on_GifButton_clicked() {
                                           tr("Gif (*.gif)"));
 
   if (!gif_file.isEmpty()) {
+    if (!gif) gif = new QGifImage((QSize(640, 480)));
     ui->GifButton->setEnabled(false);
     ui->SaveButton->setEnabled(false);
     ui->OpenFileButton->setEnabled(false);
-    ui->VertexButton->setEnabled(false);
-    ui->EdgesButton->setEnabled(false);
     ui->ScreenButton->setEnabled(false);
     t->start(100);
   }
@@ -293,23 +293,23 @@ void MainWindow::new_frame() {
   QPixmap pixmap = get_screen();
   if (!pixmap.isNull()) {
     QImage image = pixmap.toImage();
-    gif.addFrame(image);
-    gif.setDefaultDelay(100);
+    gif->addFrame(image);
+    gif->setDefaultDelay(100);
   }
   counter++;
 
   if (counter == 50) {
     counter = 0;
-    gif.save(gif_file);
-    QMessageBox::information(this, tr("Уведомление"),
-                             tr("Запись gif завершена"));
+    gif->save(gif_file);
     t->stop();
     ui->GifButton->setEnabled(true);
     ui->SaveButton->setEnabled(true);
     ui->OpenFileButton->setEnabled(true);
-    ui->VertexButton->setEnabled(true);
-    ui->EdgesButton->setEnabled(true);
     ui->ScreenButton->setEnabled(true);
+    QMessageBox::information(this, tr("Уведомление"),
+                             tr("Запись gif завершена"));
+    delete gif;
+    gif = nullptr;
   }
 }
 
