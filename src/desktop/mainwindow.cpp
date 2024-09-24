@@ -62,6 +62,11 @@ void MainWindow::on_GifButton_clicked() {
 
   if (!gif_file.isEmpty()) {
     ui->GifButton->setEnabled(false);
+    ui->SaveButton->setEnabled(false);
+    ui->OpenFileButton->setEnabled(false);
+    ui->VertexButton->setEnabled(false);
+    ui->EdgesButton->setEnabled(false);
+    ui->ScreenButton->setEnabled(false);
     t->start(100);
   }
 }
@@ -300,6 +305,11 @@ void MainWindow::new_frame() {
                              tr("Запись gif завершена"));
     t->stop();
     ui->GifButton->setEnabled(true);
+    ui->SaveButton->setEnabled(true);
+    ui->OpenFileButton->setEnabled(true);
+    ui->VertexButton->setEnabled(true);
+    ui->EdgesButton->setEnabled(true);
+    ui->ScreenButton->setEnabled(true);
   }
 }
 
