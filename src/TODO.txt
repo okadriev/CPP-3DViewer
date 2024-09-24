@@ -7,18 +7,6 @@
 Почему сега, если пихаю все в отрисовку?
 Вроде норм. В больших моделях с вкл точками появляется какая-то дичь (остов оригинальной модели). 
 Вроде норм. Починить толщину.
-спп чек: 
-      viewer/paint/figure.cpp:21:35: style: Parameter 'filename' can be declared with const [constParameter]
-            Figure Figure::parce(std::string& filename) 
-      viewer/paint/myopenglrenderer.cpp:24:12: style: Condition 'coef<abs(fig.min_x)' is always true [knownConditionTrueFalse]
-            if (coef < abs(fig.min_x)) coef = abs(fig.min_x);      ^
-      viewer/paint/myopenglrenderer.cpp:23:19: note: Assignment 'coef=-1', assigned value is -1
-            GLfloat coef = -1;                 ^
-      viewer/paint/myopenglrenderer.cpp:24:12: note: Condition 'coef<abs(fig.min_x)' is always true
-            if (coef < abs(fig.min_x)) coef = abs(fig.min_x);
-      viewer/paint/point.cpp:3:0: style: The function 'rotate' is never used. [unusedFunction]
-      desktop/mainwindow.cpp:272:0: style: The function 'updateOpenGLWidget' is never used. [unusedFunction]
-
 
 Общие в конце:
 Убрать все выводы и либы qDebug.
