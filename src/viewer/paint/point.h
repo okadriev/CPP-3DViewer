@@ -2,7 +2,6 @@
 #define POINT_H
 
 #define _USE_MATH_DEFINES
-#include <QDebug>  // убрать
 #include <cmath>
 
 class Point {

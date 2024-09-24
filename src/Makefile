@@ -1,14 +1,16 @@
 CC = g++
 
-TEST_SRC = $(wildcard tests/*.cpp)
-TEST_OBJ = $(patsubst %.cpp,%.o,$(TEST_SRC))
-TEST_FILES = $(wildcard ) 																   ##ДОБАВИТЬ ФАЙЛЫ КОТОРЫЕ НУЖНО ПРОВЕРЯТЬ
-TEST_FILES_OBJ = $(patsubst %.cpp,%.o,$(TEST_FILES))
-TEST_EXEC = tests/test
+# TEST_SRC = viewer/test
+# TEST_OBJ = $(patsubst %.cpp,%.o,$(TEST_SRC))
+TEST_FILES = $(wildcard viewer/obj/parse.cpp viewer/obj/obj.cpp viewer/obj/model_info.cpp viewer/obj/setting_info.cpp viewer/paint/figure.cpp viewer/paint/point.cpp)
+# TEST_FILES_OBJ = $(patsubst %.cpp,%.o,$(TEST_FILES))
+# TEST_EXEC = test.out
 
 GIF_FLAG = -lgif
-GFLAG = -fprofile-arcs -ftest-coverage
-TFLAG = -lcheck -lsubunit -lm
+# GFLAG = -fprofile-arcs -ftest-coverage
+# TFLAG = -lcheck -lsubunit -lm
+GFLAG = -fprofile-arcs -ftest-coverage --coverage
+TFLAG = -lgtest -pthread -lstdc++ -lsupc++ -lgcc
 CFLAGS = -Wall -Wextra -Werror -std=c++17 -g
 
 MAIN_SRC= $(wildcard 3D_Viewer_2.0.cpp )
@@ -86,18 +88,28 @@ dist: install
 	@tar -cvzf 3d_viewer_2.0.tgz $(BUILD_DIR)
 .PHONY: dist
 
+# gcov_report: clean
+# 	@clear 
+# 	@$(CC) $(CFLAGS) -g -c gtk/s21_parce.c -o s21_parce.o --coverage
+# 	@$(CC) $(CFLAGS) -g -c gtk/s21_matrix.c -o s21_matrix.o --coverage
+# 	@$(CC) $(CFLAGS) $(GFLAG) -o gcov_r $(TEST_SRC) s21_parce.o s21_matrix.o $(TFLAG)
+# 	@mkdir coverage_report
+# 	@./gcov_r
+# 	@python3 -m gcovr -r . --html --html-details -o coverage_report/index.html --exclude test
+# 	@rm -f *.gcno *.gcda *.o gcov_r
+# 	@rm -f */*/*.gcno */*/*.gcda
+# 	@rm -f */*.gcno */*.gcda
+# .PHONY: gcov_report
+
 gcov_report: clean
-	@clear 
-	@$(CC) $(CFLAGS) -g -c  gtk/s21_parce.c -o s21_parce.o --coverage
-	@$(CC) $(CFLAGS) -g -c   gtk/s21_matrix.c -o s21_matrix.o --coverage
-	@$(CC) $(CFLAGS) $(GFLAG) -o gcov_r $(TEST_SRC) s21_parce.o s21_matrix.o $(TFLAG)
-	@mkdir coverage_report
-	@./gcov_r
-	@python3 -m gcovr -r . --html --html-details -o coverage_report/index.html --exclude test
-	@rm -f *.gcno *.gcda *.o gcov_r
-	@rm -f */*/*.gcno */*/*.gcda
-	@rm -f */*.gcno */*.gcda
-.PHONY: gcov_report
+	@clear
+	@g++ $(CFLAGS) viewer/test/test.cpp $(TEST_FILES) -o test.out $(TFLAG) $(GFLAG)
+	@./test.out
+	@mkdir -p coverage_report
+	@lcov --no-external -o coverage.info -c -d . --exclude "**/test.cpp" --exclude "**/obj/*.*"
+#--include "**/obj/parse.cpp"
+	@genhtml -o coverage_report coverage.info
+	@rm -rf *.gcno *.gcda *.gcov coverage.info test.out
 
 leak_check: 
 	@clear
@@ -130,8 +142,9 @@ clean: uninstall
 .PHONY: clean
 
 test: clean $(TEST_OBJ)
-	@$(CC) $(TEST_OBJ) -o tests/test.exe -lcheck -lm -lrt -lpthread -lsubunit -g ##!!!!!!!!!!!!!
-	@./tests/test.exe 
+	@clear
+	@g++ $(CFLAGS) viewer/test/test.cpp $(TEST_FILES) -o viewer/test/test.obj $(TFLAG)
+	@./viewer/test/test.obj
 
 %.o: %.cpp
 	@$(CC) $(CFLAGS) $(GIF_FLAG) -cpp $< -o $@

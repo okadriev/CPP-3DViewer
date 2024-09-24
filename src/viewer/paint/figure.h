@@ -1,13 +1,11 @@
 #ifndef FIGURE_H
 #define FIGURE_H
 
-#include <QDebug>  // убрать
 #include <vector>
 
+#include "../obj/obj.hpp"
 #undef TINYOBJLOADER_IMPLEMENTATION
 #include "../obj/tiny_obj_loader.h"
-#define TINYOBJLOADER_IMPLEMENTATION
-#include "../obj/obj.hpp"
 #include "point.h"
 
 class Figure {
