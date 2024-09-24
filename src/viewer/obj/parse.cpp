@@ -1,6 +1,6 @@
 #include "parse.h"
 
-std::vector<size_t> parse_file(std::string& filename) {
+std::vector<size_t> parse_file(const std::string& filename) {
   tinyobj::ObjReader reader;
   tinyobj::ObjReaderConfig config;
   config.triangulate = false;

@@ -7,6 +7,6 @@
 #include "../paint/figure.h"
 #include "tiny_obj_loader.h"
 
-std::vector<size_t> parse_file(std::string &filename);
+std::vector<size_t> parse_file(const std::string &filename);
 
 #endif  // PARCE_H
