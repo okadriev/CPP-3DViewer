@@ -6,6 +6,7 @@
 #include <QString>
 
 #include "../viewer/obj/obj.hpp"
+#include "../viewer/obj/parse.h"
 
 class Controller {
  public:

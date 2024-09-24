@@ -10,7 +10,8 @@ void Controller::update_model_info(QString filename) {
     model_info->filename =
         std::make_unique<std::string>(filename.toStdString());
 
-  model_info->zero_model_info();
+  std::vector<size_t> info = parse_file(*model_info->filename.get());
+  model_info->zero_model_info(info[0], info[1]);
 }
 
 void Controller::update_model_info(char action, char axis, double value) {

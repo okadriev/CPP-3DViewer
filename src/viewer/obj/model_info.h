@@ -9,7 +9,7 @@ class ModelInfo {
   // инициализация ModelInfo
   ModelInfo();
   // обновление ModelInfo
-  void zero_model_info();
+  void zero_model_info(int points, int edges);
 
   std::unique_ptr<std::string> filename;
   int num_vertices;

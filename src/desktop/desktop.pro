@@ -18,8 +18,9 @@ SOURCES += \
     ../viewer/obj/model_info.cpp \
     ../viewer/obj/setting_info.cpp \
     ../viewer/obj/obj.cpp \
+    ../viewer/obj/parse.cpp \
     ../viewer/paint/myopenglrenderer.cpp \
-    ../viewer/paint/point.cpp
+    ../viewer/paint/point.cpp \
 
 HEADERS += \
     mainwindow.h \
@@ -28,9 +29,10 @@ HEADERS += \
     ../viewer/obj/obj.hpp \
     ../viewer/obj/model_info.h \
     ../viewer/obj/setting_info.h \
+    ../viewer/obj/tiny_obj_loader.h \
+    ../viewer/obj/parse.h \
     ../viewer/paint/myopenglrenderer.h \
     ../viewer/paint/point.h \
-    ../viewer/paint/tiny_obj_loader.h
 
 FORMS += \
     mainwindow.ui

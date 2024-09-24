@@ -12,9 +12,7 @@ ModelInfo::ModelInfo() {
   num_edges = 0;
 }
 
-void ModelInfo::zero_model_info() {
-  Figure fig = get_figure()->parce(*filename.get()).normalize();
-
+void ModelInfo::zero_model_info(int points, int edges) {
   rotate_x = 180;
   rotate_y = 180;
   rotate_z = 180;
@@ -22,6 +20,6 @@ void ModelInfo::zero_model_info() {
   trans_x = 50;
   trans_y = 50;
   trans_z = 50;
-  num_vertices = fig.points.size() / 3;
-  num_edges = fig.edges.size() / 2;
+  num_vertices = points;
+  num_edges = edges;
 }

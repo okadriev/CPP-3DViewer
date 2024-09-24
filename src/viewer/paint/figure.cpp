@@ -1,8 +1,6 @@
 #include "figure.h"
 
 Figure::Figure() {
-  count_points = 0;
-  count_edges = 0;
   min_x = __FLT_MAX__;
   min_y = __FLT_MAX__;
   min_z = __FLT_MAX__;
@@ -16,30 +14,6 @@ Figure::~Figure() {
   edges_file.clear();
   points.clear();
   edges.clear();
-}
-
-Figure Figure::parce(std::string& filename) {
-  tinyobj::ObjReader reader;
-  tinyobj::ObjReaderConfig config;
-  config.triangulate = false;
-  if (!reader.ParseFromFile(filename, config)) {
-    if (!reader.Error().empty()) {
-      std::cerr << "TinyObjReader: " << reader.Error();
-    }
-    exit(1);
-  }
-
-  auto& attrib = reader.GetAttrib();
-  auto& shapes = reader.GetShapes();
-
-  points_file = attrib.vertices;
-  find_min_max_vertices();
-  convert_shapes_to_edges(shapes);
-
-  points = std::vector<float>(points_file);
-  edges = std::vector<unsigned int>(edges_file);
-
-  return *this;
 }
 
 void Figure::find_min_max_vertices() {
