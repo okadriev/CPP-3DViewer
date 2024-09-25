@@ -226,7 +226,7 @@ void MainWindow::on_SizeEdgesScrollBar_valueChanged(int value) {
 void MainWindow::on_EdgesLineEdit_textChanged(const QString &text) {
   bool ok;
   int value = text.toInt(&ok);
-  if (ok && value >= 0 && value <= 100) {
+  if (ok && value >= 1 && value <= 10) {
     ui->SizeEdgesScrollBar->setValue(value);
   }
 }
@@ -260,7 +260,7 @@ void MainWindow::on_SizeVertexScrollBar_valueChanged(int value) {
 void MainWindow::on_VertexLineEdit_textChanged(const QString &text) {
   bool ok;
   int value = text.toInt(&ok);
-  if (ok && value >= 0 && value <= 100) {
+  if (ok && value >= 1 && value <= 100) {
     ui->SizeVertexScrollBar->setValue(value);
   }
 }
@@ -384,73 +384,73 @@ void MainWindow::update_scale() {
   ui->ScaleLineEdit->setText(QString::number(controller.get_scale()));
 }
 
-// void MainWindow::setupConnections() {
-//   connect(ui->BackgroundColorButton, &QPushButton::clicked, this,
-//           &MainWindow::on_BackgroundColorButton_clicked);
-//   connect(ui->OpenFileButton, &QPushButton::clicked, this,
-//           &MainWindow::on_OpenFileButton_clicked);
-//   connect(ui->SaveButton, &QPushButton::clicked, this,
-//           &MainWindow::on_SaveButton_clicked);
-//   connect(ui->ScreenButton, &QPushButton::clicked, this,
-//           &MainWindow::on_ScreenButton_clicked);
-//   connect(ui->GifButton, &QPushButton::clicked, this,
-//           &MainWindow::on_GifButton_clicked);
-//   connect(ui->VertexButton, &QPushButton::clicked, this,
-//           &MainWindow::on_VertexButton_clicked);
-//   connect(ui->EdgesButton, &QPushButton::clicked, this,
-//           &MainWindow::on_EdgesButton_clicked);
+void MainWindow::setupConnections() {
+  connect(ui->BackgroundColorButton, &QPushButton::clicked, this,
+          &MainWindow::on_BackgroundColorButton_clicked);
+  connect(ui->OpenFileButton, &QPushButton::clicked, this,
+          &MainWindow::on_OpenFileButton_clicked);
+  connect(ui->SaveButton, &QPushButton::clicked, this,
+          &MainWindow::on_SaveButton_clicked);
+  connect(ui->ScreenButton, &QPushButton::clicked, this,
+          &MainWindow::on_ScreenButton_clicked);
+  connect(ui->GifButton, &QPushButton::clicked, this,
+          &MainWindow::on_GifButton_clicked);
+  connect(ui->VertexButton, &QPushButton::clicked, this,
+          &MainWindow::on_VertexButton_clicked);
+  connect(ui->EdgesButton, &QPushButton::clicked, this,
+          &MainWindow::on_EdgesButton_clicked);
 
-//   connect(ui->TransposeScrollBar_x, &QScrollBar::valueChanged, this,
-//           &MainWindow::on_TransposeScrollBar_x_valueChanged);
-//   connect(ui->TransposeLineEdit_x, &QLineEdit::textChanged, this,
-//           &MainWindow::on_TransposeLineEdit_x_textChanged);
-//   connect(ui->TransposeScrollBar_y, &QScrollBar::valueChanged, this,
-//           &MainWindow::on_TransposeScrollBar_y_valueChanged);
-//   connect(ui->TransposeLineEdit_y, &QLineEdit::textChanged, this,
-//           &MainWindow::on_TransposeLineEdit_y_textChanged);
-//   connect(ui->TransposeScrollBar_z, &QScrollBar::valueChanged, this,
-//           &MainWindow::on_TransposeScrollBar_z_valueChanged);
-//   connect(ui->TransposeLineEdit_z, &QLineEdit::textChanged, this,
-//           &MainWindow::on_TransposeLineEdit_z_textChanged);
+  connect(ui->TransposeScrollBar_x, &QScrollBar::valueChanged, this,
+          &MainWindow::on_TransposeScrollBar_x_valueChanged);
+  connect(ui->TransposeLineEdit_x, &QLineEdit::textChanged, this,
+          &MainWindow::on_TransposeLineEdit_x_textChanged);
+  connect(ui->TransposeScrollBar_y, &QScrollBar::valueChanged, this,
+          &MainWindow::on_TransposeScrollBar_y_valueChanged);
+  connect(ui->TransposeLineEdit_y, &QLineEdit::textChanged, this,
+          &MainWindow::on_TransposeLineEdit_y_textChanged);
+  connect(ui->TransposeScrollBar_z, &QScrollBar::valueChanged, this,
+          &MainWindow::on_TransposeScrollBar_z_valueChanged);
+  connect(ui->TransposeLineEdit_z, &QLineEdit::textChanged, this,
+          &MainWindow::on_TransposeLineEdit_z_textChanged);
 
-//   connect(ui->RotateScrollBar_x, &QScrollBar::valueChanged, this,
-//           &MainWindow::on_RotateScrollBar_x_valueChanged);
-//   connect(ui->RotateLineEdit_x, &QLineEdit::textChanged, this,
-//           &MainWindow::on_RotateLineEdit_x_textChanged);
-//   connect(ui->RotateScrollBar_y, &QScrollBar::valueChanged, this,
-//           &MainWindow::on_RotateScrollBar_y_valueChanged);
-//   connect(ui->RotateLineEdit_y, &QLineEdit::textChanged, this,
-//           &MainWindow::on_RotateLineEdit_y_textChanged);
-//   connect(ui->RotateScrollBar_z, &QScrollBar::valueChanged, this,
-//           &MainWindow::on_RotateScrollBar_z_valueChanged);
-//   connect(ui->RotateLineEdit_z, &QLineEdit::textChanged, this,
-//           &MainWindow::on_RotateLineEdit_z_textChanged);
+  connect(ui->RotateScrollBar_x, &QScrollBar::valueChanged, this,
+          &MainWindow::on_RotateScrollBar_x_valueChanged);
+  connect(ui->RotateLineEdit_x, &QLineEdit::textChanged, this,
+          &MainWindow::on_RotateLineEdit_x_textChanged);
+  connect(ui->RotateScrollBar_y, &QScrollBar::valueChanged, this,
+          &MainWindow::on_RotateScrollBar_y_valueChanged);
+  connect(ui->RotateLineEdit_y, &QLineEdit::textChanged, this,
+          &MainWindow::on_RotateLineEdit_y_textChanged);
+  connect(ui->RotateScrollBar_z, &QScrollBar::valueChanged, this,
+          &MainWindow::on_RotateScrollBar_z_valueChanged);
+  connect(ui->RotateLineEdit_z, &QLineEdit::textChanged, this,
+          &MainWindow::on_RotateLineEdit_z_textChanged);
 
-//   connect(ui->ScaleScrollBar, &QScrollBar::valueChanged, this,
-//           &MainWindow::on_ScaleScrollBar_valueChanged);
-//   connect(ui->ScaleLineEdit, &QLineEdit::textChanged, this,
-//           &MainWindow::on_ScaleLineEdit_textChanged);
+  connect(ui->ScaleScrollBar, &QScrollBar::valueChanged, this,
+          &MainWindow::on_ScaleScrollBar_valueChanged);
+  connect(ui->ScaleLineEdit, &QLineEdit::textChanged, this,
+          &MainWindow::on_ScaleLineEdit_textChanged);
 
-//   connect(ui->CancelEdgesButton, &QDialogButtonBox::clicked, this,
-//           &MainWindow::on_CancelEdgesButton_clicked);
-//   connect(ui->ColorEdgesButton, &QPushButton::clicked, this,
-//           &MainWindow::on_ColorEdgesButton_clicked);
-//   connect(ui->SizeEdgesScrollBar, &QScrollBar::valueChanged, this,
-//           &MainWindow::on_SizeEdgesScrollBar_valueChanged);
-//   connect(ui->EdgesLineEdit, &QLineEdit::textChanged, this,
-//           &MainWindow::on_EdgesLineEdit_textChanged);
+  connect(ui->CancelEdgesButton, &QDialogButtonBox::clicked, this,
+          &MainWindow::on_CancelEdgesButton_clicked);
+  connect(ui->ColorEdgesButton, &QPushButton::clicked, this,
+          &MainWindow::on_ColorEdgesButton_clicked);
+  connect(ui->SizeEdgesScrollBar, &QScrollBar::valueChanged, this,
+          &MainWindow::on_SizeEdgesScrollBar_valueChanged);
+  connect(ui->EdgesLineEdit, &QLineEdit::textChanged, this,
+          &MainWindow::on_EdgesLineEdit_textChanged);
 
-//   connect(ui->CancelVertexButton, &QDialogButtonBox::clicked, this,
-//           &MainWindow::on_CancelVertexButton_clicked);
-//   connect(ui->ColorVertexButton, &QPushButton::clicked, this,
-//           &MainWindow::on_ColorVertexButton_clicked);
-//   connect(ui->SizeVertexScrollBar, &QScrollBar::valueChanged, this,
-//           &MainWindow::on_SizeVertexScrollBar_valueChanged);
-//   connect(ui->VertexLineEdit, &QLineEdit::textChanged, this,
-//           &MainWindow::on_VertexLineEdit_textChanged);
+  connect(ui->CancelVertexButton, &QDialogButtonBox::clicked, this,
+          &MainWindow::on_CancelVertexButton_clicked);
+  connect(ui->ColorVertexButton, &QPushButton::clicked, this,
+          &MainWindow::on_ColorVertexButton_clicked);
+  connect(ui->SizeVertexScrollBar, &QScrollBar::valueChanged, this,
+          &MainWindow::on_SizeVertexScrollBar_valueChanged);
+  connect(ui->VertexLineEdit, &QLineEdit::textChanged, this,
+          &MainWindow::on_VertexLineEdit_textChanged);
 
-//   connect(ui->ParallelButton, &QPushButton::clicked, this,
-//           &MainWindow::on_ParallelButton_clicked);
-//   connect(ui->CenterButton, &QPushButton::clicked, this,
-//           &MainWindow::on_CenterButton_clicked);
-// }
+  connect(ui->ParallelButton, &QPushButton::clicked, this,
+          &MainWindow::on_ParallelButton_clicked);
+  connect(ui->CenterButton, &QPushButton::clicked, this,
+          &MainWindow::on_CenterButton_clicked);
+}

@@ -2,14 +2,14 @@ CC = g++
 
 # TEST_SRC = viewer/test
 # TEST_OBJ = $(patsubst %.cpp,%.o,$(TEST_SRC))
-TEST_FILES = $(wildcard viewer/obj/parse.cpp viewer/obj/obj.cpp viewer/obj/model_info.cpp viewer/obj/setting_info.cpp viewer/paint/figure.cpp viewer/paint/point.cpp)
+TEST_SRC = $(wildcard viewer/obj/obj.cpp viewer/obj/model_info.cpp viewer/obj/setting_info.cpp viewer/test/test.cpp)
 # TEST_FILES_OBJ = $(patsubst %.cpp,%.o,$(TEST_FILES))
 # TEST_EXEC = test.out
 
-GIF_FLAG = -lgif
+# GIF_FLAG = -lgif
 # GFLAG = -fprofile-arcs -ftest-coverage
 # TFLAG = -lcheck -lsubunit -lm
-GFLAG = -fprofile-arcs -ftest-coverage --coverage
+GFLAG = -fprofile-arcs -ftest-coverage
 TFLAG = -lgtest -pthread -lstdc++ -lsupc++ -lgcc
 CFLAGS = -Wall -Wextra -Werror -std=c++17 -g
 
@@ -33,23 +33,23 @@ EXEC = 3D_Viewer_2.0
 
 all: install run
 
-# $(VIEW_LIB): $(VIEW_OBJ)
-# 	@ar rcs $(VIEW_LIB) $(VIEW_OBJ) 
-# 	@ranlib $(VIEW_LIB)
-# 	@rm -f $(VIEW_OBJ) 
-# .PHONY: $(VIEW_LIB)
+$(VIEW_LIB): $(VIEW_OBJ)
+	@ar rcs $(VIEW_LIB) $(VIEW_OBJ) 
+	@ranlib $(VIEW_LIB)
+	@rm -f $(VIEW_OBJ) 
+.PHONY: $(VIEW_LIB)
 
-# $(CNTRL_LIB): $(CNTRL_OBJ)
-# 	@ar rcs $(CNTRL_LIB) $(CNTRL_OBJ) 
-# 	@ranlib $(CNTRL_LIB)
-# 	@rm -f $(CNTRL_OBJ) 
-# .PHONY: $(CNTRL_LIB)
+$(CNTRL_LIB): $(CNTRL_OBJ)
+	@ar rcs $(CNTRL_LIB) $(CNTRL_OBJ) 
+	@ranlib $(CNTRL_LIB)
+	@rm -f $(CNTRL_OBJ) 
+.PHONY: $(CNTRL_LIB)
 
-# $(MODEL_LIB): $(MODEL_OBJ) 
-# 	@ar rcs $(MODEL_LIB) $(MODEL_OBJ) 
-# 	@ranlib $(MODEL_LIB)
-# 	@rm -f $(MODEL_OBJ) 
-# .PHONY: $(MODEL_LIB)
+$(MODEL_LIB): $(MODEL_OBJ) 
+	@ar rcs $(MODEL_LIB) $(MODEL_OBJ) 
+	@ranlib $(MODEL_LIB)
+	@rm -f $(MODEL_OBJ) 
+.PHONY: $(MODEL_LIB)
 
 install:
 	@clear
@@ -88,28 +88,29 @@ dist: install
 	@tar -cvzf 3d_viewer_2.0.tgz $(BUILD_DIR)
 .PHONY: dist
 
-# gcov_report: clean
-# 	@clear 
-# 	@$(CC) $(CFLAGS) -g -c gtk/s21_parce.c -o s21_parce.o --coverage
-# 	@$(CC) $(CFLAGS) -g -c gtk/s21_matrix.c -o s21_matrix.o --coverage
-# 	@$(CC) $(CFLAGS) $(GFLAG) -o gcov_r $(TEST_SRC) s21_parce.o s21_matrix.o $(TFLAG)
-# 	@mkdir coverage_report
-# 	@./gcov_r
-# 	@python3 -m gcovr -r . --html --html-details -o coverage_report/index.html --exclude test
-# 	@rm -f *.gcno *.gcda *.o gcov_r
-# 	@rm -f */*/*.gcno */*/*.gcda
-# 	@rm -f */*.gcno */*.gcda
-# .PHONY: gcov_report
+gcov_report: clean 
+	@clear 
+	@$(CC) $(CFLAGS) -g -c viewer/obj/parse.cpp -o parce.o --coverage
+	@$(CC) $(CFLAGS) -g -c viewer/paint/figure.cpp -o figure.o --coverage
+	@$(CC) $(CFLAGS) -g -c viewer/paint/point.cpp -o point.o --coverage
+	@$(CC) $(CFLAGS) $(GFLAG) -o gcov_r $(TEST_SRC) point.o  parce.o figure.o $(TFLAG)
+	@mkdir coverage_report
+	@./gcov_r
+	@python3 -m gcovr -r . --html --html-details -o coverage_report/index.html --exclude gcov_r
+	@rm -f *.gcno *.gcda *.o gcov_r
+	@rm -f */*/*.gcno */*/*.gcda
+	@rm -f */*.gcno */*.gcda
+.PHONY: gcov_report
 
-gcov_report: clean
-	@clear
-	@g++ $(CFLAGS) viewer/test/test.cpp $(TEST_FILES) -o test.out $(TFLAG) $(GFLAG)
-	@./test.out
-	@mkdir -p coverage_report
-	@lcov --no-external -o coverage.info -c -d . --exclude "**/test.cpp" --exclude "**/obj/*.*"
-#--include "**/obj/parse.cpp"
-	@genhtml -o coverage_report coverage.info
-	@rm -rf *.gcno *.gcda *.gcov coverage.info test.out
+# gcov_report: clean
+# 	@clear
+# 	@g++ $(CFLAGS) viewer/test/test.cpp $(TEST_FILES) -o test.out $(TFLAG) $(GFLAG)
+# 	@./test.out
+# 	@mkdir -p coverage_report
+# 	@lcov --no-external -o coverage.info -c -d . --exclude "**/test.cpp" --exclude "**/obj/*.*"
+# #--include "**/obj/parse.cpp"
+# 	@genhtml -o coverage_report coverage.info
+# 	@rm -rf *.gcno *.gcda *.gcov coverage.info test.out
 
 leak_check: 
 	@clear
@@ -148,3 +149,6 @@ test: clean $(TEST_OBJ)
 
 %.o: %.cpp
 	@$(CC) $(CFLAGS) $(GIF_FLAG) -cpp $< -o $@
+
+add_coverage:
+	$(eval CFLAGS:=$(CFLAGS) $(GFLAGS))

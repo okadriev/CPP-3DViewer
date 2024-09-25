@@ -83,7 +83,7 @@ class MainWindow : public QMainWindow {
   QString gif_file;
 
   QPixmap get_screen();
-  // void setupConnections();
+  void setupConnections();
   void updateOpenGLWidget();
   void updateInfoLabel();
   void update_edges();
