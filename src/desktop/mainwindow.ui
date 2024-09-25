@@ -574,8 +574,11 @@
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>
          </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
          <property name="maximum">
-          <number>100</number>
+          <number>10</number>
          </property>
          <property name="singleStep">
           <number>1</number>
@@ -588,6 +591,9 @@
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="invertedControls">
+          <bool>false</bool>
          </property>
         </widget>
         <widget class="QRadioButton" name="SolidEdgesRadioButton">
@@ -745,6 +751,9 @@
          </property>
          <property name="inputMethodHints">
           <set>Qt::ImhNone</set>
+         </property>
+         <property name="minimum">
+          <number>1</number>
          </property>
          <property name="maximum">
           <number>100</number>

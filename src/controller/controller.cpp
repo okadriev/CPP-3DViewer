@@ -6,6 +6,16 @@ Controller::Controller() {
   setting_info = settinginfo();
 }
 
+void Controller::setupOpenGL(QOpenGLWidget *openglwidget) {
+  if (openglwidget) {
+    m_renderer = new MyOpenGLRenderer(openglwidget, this);
+    connect(openglwidget, &QOpenGLWidget::aboutToCompose, m_renderer,
+            &MyOpenGLRenderer::initializeGL);
+    connect(openglwidget, &QOpenGLWidget::frameSwapped, m_renderer,
+            &MyOpenGLRenderer::paintGL);
+  }
+}
+
 void Controller::update_model_info(QString filename) {
   if (!filename.isEmpty())
     model_info->filename =

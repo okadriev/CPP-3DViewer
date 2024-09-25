@@ -30,7 +30,6 @@ class MyOpenGLRenderer : public QObject, protected QOpenGLFunctions {
   QColor get_color();
   QColor get_edge_color();
   QColor get_points_color();
-  float get_line_thickness();
 };
 }
 #endif  // OPENGLRENDERER_H

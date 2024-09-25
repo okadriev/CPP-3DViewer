@@ -7,6 +7,10 @@
 
 #include "../viewer/obj/obj.hpp"
 #include "../viewer/obj/parse.h"
+#include "../viewer/paint/myopenglrenderer.h"
+
+class Controller : public QObject {
+  Q_OBJECT
 
 namespace s21{
 class Controller {
@@ -16,6 +20,7 @@ class Controller {
   void update_model_info(QString filename);
   void update_model_info(char action, char axis, double value);
   void update_model_info(int scale);
+  void setupOpenGL(QOpenGLWidget *openglwidget);
 
   std::unique_ptr<std::string> get_filename();
   int get_vertices() { return model_info->num_vertices; };
@@ -35,7 +40,7 @@ class Controller {
   void update_setting_info(bool push, bool zero, bool cercle, bool square,
                            std::unique_ptr<std::string> temp, int value);
   void update_setting_info(int value);
-  
+
   int get_edges_type() { return setting_info->edges_type; };
   int get_vertex_type() { return setting_info->vertex_type; };
   int get_edge_thickness() { return setting_info->edge_thickness; };
@@ -45,6 +50,7 @@ class Controller {
  private:
   ModelInfo *model_info;
   SettingInfo *setting_info;
+  MyOpenGLRenderer *m_renderer;
 };
 }
 #endif  // CONTROLLER_H

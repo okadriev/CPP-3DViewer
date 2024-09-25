@@ -17,7 +17,6 @@
 #include <string>
 
 #include "../controller/controller.h"
-#include "../viewer/paint/myopenglrenderer.h"
 #include "QtGifImage/include/QtGifImage/qgifimage.h"
 
 QT_BEGIN_NAMESPACE
@@ -77,7 +76,6 @@ class MainWindow : public QMainWindow {
 
 //для отрисовки
   QOpenGLWidget *openGLWidget;
-  MyOpenGLRenderer *m_renderer;
 
 //для гиф
   QTimer *t;
@@ -85,8 +83,7 @@ class MainWindow : public QMainWindow {
   QString gif_file;
 
   QPixmap get_screen();
-  void setupOpenGL();
-  // void setupConnections();
+  void setupConnections();
   void updateOpenGLWidget();
   void updateInfoLabel();
   void update_edges();
