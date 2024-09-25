@@ -109,13 +109,13 @@ style_check:
 google_check:
 	@clear
 	@cp ../materials/linters/.clang-format .
-	@clang-format -n $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC) $(CNTRL_SRC)
+	@clang-format -n *.cpp */*.cpp */*.h */*/*.cpp */*/*.h */*/*.hpp
 .PHONY: clang_check
 
 g_edit:
 	@clear
 	@cp ../materials/linters/.clang-format .
-	@clang-format -i $(TEST_SRS) $(VIEW_SRC) $(MODEL_SRC) $(MAIN_SRC) $(CNTRL_SRC)
+	@clang-format -i *.cpp */*.cpp */*.h */*/*.cpp */*/*.h */*/*.hpp
 .PHONY: clang_check
 
 clean: uninstall
@@ -126,7 +126,7 @@ clean: uninstall
 	@rm -f desktop/ui_mainwindow.h desktop/*.user desktop/moc*
 .PHONY: clean
 
-test: clean 
+tests: clean 
 	@clear
 	@g++ $(CFLAGS) viewer/test/test.cpp $(TEST_FILES) -o $(TEST_EXEC) $(TFLAG)
 	@./$(TEST_EXEC)

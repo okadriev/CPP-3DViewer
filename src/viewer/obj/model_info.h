@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-namespace s21{
+namespace s21 {
 class ModelInfo {
  public:
   // инициализация ModelInfo
@@ -19,8 +19,6 @@ class ModelInfo {
   double rotate_x, rotate_y, rotate_z;
   int scale;
 };
-}
-
-#include "../paint/figure.h"  // починить костыль
+}  // namespace s21
 
 #endif  // MODELINFO_H

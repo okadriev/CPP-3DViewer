@@ -25,7 +25,7 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-namespace s21{
+namespace s21 {
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
@@ -71,13 +71,13 @@ class MainWindow : public QMainWindow {
   Ui::MainWindow *ui;
   Controller controller;
 
-//для временного хранения цвета
+  //для временного хранения цвета
   std::unique_ptr<std::string> temp;
 
-//для отрисовки
+  //для отрисовки
   QOpenGLWidget *openGLWidget;
 
-//для гиф
+  //для гиф
   QTimer *t;
   QGifImage *gif;
   QString gif_file;
@@ -99,5 +99,5 @@ typedef enum { I_ONE, I_TWO, I_THREE } IndexType;
 // перечисление для типа проекции
 typedef enum { V_PARALLEL, V_CENTER } ProjectType;
 
-}
+}  // namespace s21
 #endif  // MAINWINDOW_H

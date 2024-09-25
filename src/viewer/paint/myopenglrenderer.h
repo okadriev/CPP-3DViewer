@@ -1,10 +1,7 @@
 #ifndef OPENGLRENDERER_H
 #define OPENGLRENDERER_H
 
-// #define GL_SILENCE_DEPRECATION
-
 #include <QMessageBox>
-// #include <QWheelEvent>
 #include <QObject>
 #include <QOpenGLWidget>
 #include <QWidget>
@@ -12,7 +9,8 @@
 #include <iostream>
 
 #include "../obj/obj.hpp"
-namespace s21{
+#include "figure.h"
+namespace s21 {
 class MyOpenGLRenderer : public QObject, protected QOpenGLFunctions {
   Q_OBJECT
 
@@ -21,7 +19,6 @@ class MyOpenGLRenderer : public QObject, protected QOpenGLFunctions {
 
   void initializeGL();
   void paintGL();
-  //   void resizeGL(int w, int h);
 
  private:
   QOpenGLWidget *m_glWidget;
@@ -31,5 +28,5 @@ class MyOpenGLRenderer : public QObject, protected QOpenGLFunctions {
   QColor get_edge_color();
   QColor get_points_color();
 };
-}
+}  // namespace s21
 #endif  // OPENGLRENDERER_H

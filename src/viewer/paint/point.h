@@ -11,7 +11,7 @@ class Point {
   void rotateZ(float angle);
 
  public:
-  Point(float _x = 0, float _y = 0, float _z = 0) : x(_x), y(_y), z(_z) {};
+  Point(float _x = 0, float _y = 0, float _z = 0) : x(_x), y(_y), z(_z){};
 
   float x, y, z;
 
@@ -19,5 +19,5 @@ class Point {
   void move(float dx, float dy, float dz);
   void scale(float factor);
 };
-}
+}  // namespace s21
 #endif  // POINT_H

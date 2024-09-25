@@ -27,25 +27,16 @@ void MyOpenGLRenderer::initializeGL() {
   glEnableClientState(GL_VERTEX_ARRAY);
 
   if (settings.vertex_type) {
-    // if (settings.vertex_type == 1) {
-    //   // glEnable(GL_POINT_SMOOTH);
-    //   glEnable(GL_POINT_SMOOTH_HINT);
-    // }
     glPointSize(settings.vertex_size);
     color = get_points_color();
     glColor3f(color.redF(), color.greenF(), color.blueF());
     glDrawArrays(GL_POINTS, 0, fig.points.size() / 3);
-    // if (settings.vertex_type == 1) {
-    //   // glDisable(GL_POINT_SMOOTH);
-    //   glDisable(GL_POINT_SMOOTH_HINT);
-    // }
   }
 
   if (settinginfo()->edges_type) {
     glEnable(GL_LINE_STIPPLE);
     glLineStipple(1, 0x00FF);
   }
-  // glLineWidth(get_line_thickness());
   glLineWidth(settinginfo()->edge_thickness);
   color = get_edge_color();
   glColor3f(color.redF(), color.greenF(), color.blueF());
