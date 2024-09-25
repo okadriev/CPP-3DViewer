@@ -1,16 +1,11 @@
 CC = g++
 
-# TEST_SRC = viewer/test
-# TEST_OBJ = $(patsubst %.cpp,%.o,$(TEST_SRC))
 TEST_SRC = $(wildcard viewer/obj/obj.cpp viewer/obj/model_info.cpp viewer/obj/setting_info.cpp viewer/test/test.cpp)
-# TEST_FILES_OBJ = $(patsubst %.cpp,%.o,$(TEST_FILES))
+TEST_FILES = $(wildcard viewer/obj/parse.cpp viewer/obj/obj.cpp viewer/obj/model_info.cpp viewer/obj/setting_info.cpp viewer/paint/figure.cpp viewer/paint/point.cpp)
 TEST_EXEC = test.out
 
-# GIF_FLAG = -lgif
-# GFLAG = -fprofile-arcs -ftest-coverage
-# TFLAG = -lcheck -lsubunit -lm
 GFLAG = -fprofile-arcs -ftest-coverage
-TFLAG = -lgtest -pthread -lstdc++ -lsupc++ -lgcc
+TFLAG = -lgtest -lgtest_main -pthread -lstdc++ -lsupc++ -lgcc
 CFLAGS = -Wall -Wextra -Werror -std=c++17 -g
 
 MAIN_SRC= $(wildcard 3D_Viewer_2.0.cpp )
@@ -96,12 +91,12 @@ gcov_report: clean
 	@$(CC) $(CFLAGS) $(GFLAG) -o gcov_r $(TEST_SRC) point.o  parce.o figure.o $(TFLAG)
 	@mkdir coverage_report
 	@./gcov_r
-	@python3 -m gcovr -r . --html --html-details -o coverage_report/index.html --exclude viewer/obj/obj.cpp --exclude viewer/obj/model_info.cpp --exclude viewer/obj/setting_info.cpp --exclude viewer/test/test.cpp --exclude viewer/obj/tiny_obj_loader.h
+	@python3 -m gcovr -r . --html --html-details -o coverage_report/index.html --exclude viewer/obj/obj.cpp --exclude viewer/obj/model_info.cpp --exclude viewer/obj/setting_info.cpp --exclude viewer/test/test.cpp --exclude viewer/obj/tiny_obj_loader.h --exclude viewer/obj/obj.hpp
 	@rm -f *.gcno *.gcda *.o gcov_r coverage.info
 	@rm -f */*/*.gcno */*/*.gcda */*.gcno */*.gcda
 .PHONY: gcov_report
 
-leak_check: 
+leak_check: test
 	@clear
 	@valgrind --tool=memcheck --leak-check=yes ./$(TEST_EXEC)
 .PHONY: leak_check
@@ -133,7 +128,7 @@ clean: uninstall
 
 test: clean 
 	@clear
-	@g++ $(CFLAGS) viewer/test/test.cpp $(TEST_FILES) -o $(TEST_EXEC)$(TFLAG)
+	@g++ $(CFLAGS) viewer/test/test.cpp $(TEST_FILES) -o $(TEST_EXEC) $(TFLAG)
 	@./$(TEST_EXEC)
 
 %.o: %.cpp
