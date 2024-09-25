@@ -4,7 +4,7 @@ CC = g++
 # TEST_OBJ = $(patsubst %.cpp,%.o,$(TEST_SRC))
 TEST_SRC = $(wildcard viewer/obj/obj.cpp viewer/obj/model_info.cpp viewer/obj/setting_info.cpp viewer/test/test.cpp)
 # TEST_FILES_OBJ = $(patsubst %.cpp,%.o,$(TEST_FILES))
-# TEST_EXEC = test.out
+TEST_EXEC = test.out
 
 # GIF_FLAG = -lgif
 # GFLAG = -fprofile-arcs -ftest-coverage
@@ -101,16 +101,6 @@ gcov_report: clean
 	@rm -f */*/*.gcno */*/*.gcda */*.gcno */*.gcda
 .PHONY: gcov_report
 
-# gcov_report: clean
-# 	@clear
-# 	@g++ $(CFLAGS) viewer/test/test.cpp $(TEST_FILES) -o test.out $(TFLAG) $(GFLAG)
-# 	@./test.out
-# 	@mkdir -p coverage_report
-# 	@lcov --no-external -o coverage.info -c -d . --exclude "**/test.cpp" --exclude "**/obj/*.*"
-# #--include "**/obj/parse.cpp"
-# 	@genhtml -o coverage_report coverage.info
-# 	@rm -rf *.gcno *.gcda *.gcov coverage.info test.out
-
 leak_check: 
 	@clear
 	@valgrind --tool=memcheck --leak-check=yes ./$(TEST_EXEC)
@@ -134,17 +124,17 @@ g_edit:
 .PHONY: clang_check
 
 clean: uninstall
-	@rm -f $(TEST_OBJ) $(TEST_EXEC)
+	@rm -f $(TEST_EXEC)
 	@rm -rf latex html */*.o
 	@rm -rf coverage_report gcov_r Doxyfile README.md setting.txt
 	@rm -f desktop/Makefile.viewer desktop/.qmake.stash 
 	@rm -f desktop/ui_mainwindow.h desktop/*.user desktop/moc*
 .PHONY: clean
 
-test: clean $(TEST_OBJ)
+test: clean 
 	@clear
-	@g++ $(CFLAGS) viewer/test/test.cpp $(TEST_FILES) -o viewer/test/test.obj $(TFLAG)
-	@./viewer/test/test.obj
+	@g++ $(CFLAGS) viewer/test/test.cpp $(TEST_FILES) -o $(TEST_EXEC)$(TFLAG)
+	@./$(TEST_EXEC)
 
 %.o: %.cpp
 	@$(CC) $(CFLAGS) $(GIF_FLAG) -cpp $< -o $@
