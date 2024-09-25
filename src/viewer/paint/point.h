@@ -3,7 +3,7 @@
 
 #define _USE_MATH_DEFINES
 #include <cmath>
-
+namespace s21 {
 class Point {
  private:
   void rotateX(float angle);
@@ -19,5 +19,5 @@ class Point {
   void move(float dx, float dy, float dz);
   void scale(float factor);
 };
-
+}
 #endif  // POINT_H

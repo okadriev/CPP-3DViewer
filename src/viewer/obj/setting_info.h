@@ -7,6 +7,8 @@
 
 #define SAVE_SETTINHGS "../setting.txt"
 
+namespace s21 {
+
 class SettingInfo {
  public:
   // инициализация SettingInfo
@@ -23,5 +25,5 @@ class SettingInfo {
   std::unique_ptr<std::string> vertex_color;
   int vertex_size;
 };
-
+}  // namespace s21
 #endif  // SETTINGINFO_H

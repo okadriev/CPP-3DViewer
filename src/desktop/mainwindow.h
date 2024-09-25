@@ -4,7 +4,6 @@
 #include <QAbstractButton>
 #include <QColorDialog>
 #include <QDateTime>
-#include <QDebug>  // убрать
 #include <QFileDialog>
 #include <QGuiApplication>
 #include <QMainWindow>
@@ -27,6 +26,7 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+namespace s21{
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
@@ -102,4 +102,5 @@ typedef enum { I_ONE, I_TWO, I_THREE } IndexType;
 // перечисление для типа проекции
 typedef enum { V_PARALLEL, V_CENTER } ProjectType;
 
+}
 #endif  // MAINWINDOW_H

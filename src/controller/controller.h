@@ -8,6 +8,7 @@
 #include "../viewer/obj/obj.hpp"
 #include "../viewer/obj/parse.h"
 
+namespace s21{
 class Controller {
  public:
   Controller();
@@ -45,5 +46,5 @@ class Controller {
   ModelInfo *model_info;
   SettingInfo *setting_info;
 };
-
+}
 #endif  // CONTROLLER_H

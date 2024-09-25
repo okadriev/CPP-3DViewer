@@ -1,4 +1,5 @@
 #include "point.h"
+using namespace s21;
 
 void Point::rotate(float angle_x, float angle_y, float angle_z) {
   rotateX(angle_x);

@@ -1,5 +1,7 @@
 #include "setting_info.h"
 
+using namespace s21;
+
 SettingInfo::SettingInfo() {
   std::ifstream f(SAVE_SETTINHGS);
 

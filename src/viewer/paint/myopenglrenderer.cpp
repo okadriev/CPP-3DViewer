@@ -1,4 +1,5 @@
 #include "myopenglrenderer.h"
+using namespace s21;
 
 MyOpenGLRenderer::MyOpenGLRenderer(QOpenGLWidget *glWidget, QObject *parent)
     : QObject(parent), m_glWidget(glWidget) {

@@ -7,6 +7,7 @@
 #include "../obj/parse.h"
 
 using namespace std;
+using namespace s21;
 
 void paint_tyan();
 

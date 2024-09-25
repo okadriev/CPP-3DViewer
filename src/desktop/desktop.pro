@@ -17,7 +17,6 @@ SOURCES += \
     ../viewer/paint/figure.cpp \
     ../viewer/obj/model_info.cpp \
     ../viewer/obj/setting_info.cpp \
-    ../viewer/obj/obj.cpp \
     ../viewer/obj/parse.cpp \
     ../viewer/paint/myopenglrenderer.cpp \
     ../viewer/paint/point.cpp \

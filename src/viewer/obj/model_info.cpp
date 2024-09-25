@@ -1,4 +1,5 @@
 #include "model_info.h"
+using namespace s21;
 
 ModelInfo::ModelInfo() {
   rotate_x = 180;

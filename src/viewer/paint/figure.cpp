@@ -1,4 +1,5 @@
 #include "figure.h"
+using namespace s21;
 
 Figure::Figure() {
   min_x = __FLT_MAX__;

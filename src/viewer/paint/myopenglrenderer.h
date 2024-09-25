@@ -12,7 +12,7 @@
 #include <iostream>
 
 #include "../obj/obj.hpp"
-
+namespace s21{
 class MyOpenGLRenderer : public QObject, protected QOpenGLFunctions {
   Q_OBJECT
 
@@ -32,5 +32,5 @@ class MyOpenGLRenderer : public QObject, protected QOpenGLFunctions {
   QColor get_points_color();
   float get_line_thickness();
 };
-
+}
 #endif  // OPENGLRENDERER_H
