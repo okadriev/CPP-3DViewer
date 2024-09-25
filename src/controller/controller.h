@@ -9,11 +9,9 @@
 #include "../viewer/obj/parse.h"
 #include "../viewer/paint/myopenglrenderer.h"
 
+namespace s21 {
 class Controller : public QObject {
   Q_OBJECT
-
-namespace s21{
-class Controller {
  public:
   Controller();
 
@@ -52,5 +50,6 @@ class Controller {
   SettingInfo *setting_info;
   MyOpenGLRenderer *m_renderer;
 };
-}
+}  // namespace s21
+
 #endif  // CONTROLLER_H

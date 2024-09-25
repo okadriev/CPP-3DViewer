@@ -90,8 +90,3 @@ Figure Figure::normalize() {
 
   return *this;
 }
-
-Figure* get_figure() {
-  static Figure fig;
-  return &fig;
-}

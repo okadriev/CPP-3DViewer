@@ -7,7 +7,7 @@
 #undef TINYOBJLOADER_IMPLEMENTATION
 #include "../obj/tiny_obj_loader.h"
 #include "point.h"
-namespace s21{
+namespace s21 {
 class Figure {
  private:
   float min_x, min_y, min_z;
@@ -27,6 +27,9 @@ class Figure {
   Figure normalize();
 };
 
-Figure *get_figure();
-}
+inline Figure *get_figure() {
+  static Figure fig;
+  return &fig;
+};
+}  // namespace s21
 #endif  // FIGURE_H

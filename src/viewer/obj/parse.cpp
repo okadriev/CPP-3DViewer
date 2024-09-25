@@ -14,7 +14,7 @@ std::vector<size_t> s21::parse_file(const std::string& filename) {
   auto& attrib = reader.GetAttrib();
   auto& shapes = reader.GetShapes();
 
-  Figure* fig = get_figure();
+  s21::Figure* fig = s21::get_figure();
   fig->points_file = attrib.vertices;
   fig->find_min_max_vertices();
   fig->convert_shapes_to_edges(shapes);
