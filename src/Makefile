@@ -96,10 +96,9 @@ gcov_report: clean
 	@$(CC) $(CFLAGS) $(GFLAG) -o gcov_r $(TEST_SRC) point.o  parce.o figure.o $(TFLAG)
 	@mkdir coverage_report
 	@./gcov_r
-	@python3 -m gcovr -r . --html --html-details -o coverage_report/index.html --exclude gcov_r
-	@rm -f *.gcno *.gcda *.o gcov_r
-	@rm -f */*/*.gcno */*/*.gcda
-	@rm -f */*.gcno */*.gcda
+	@python3 -m gcovr -r . --html --html-details -o coverage_report/index.html --exclude viewer/obj/obj.cpp --exclude viewer/obj/model_info.cpp --exclude viewer/obj/setting_info.cpp --exclude viewer/test/test.cpp --exclude viewer/obj/tiny_obj_loader.h
+	@rm -f *.gcno *.gcda *.o gcov_r coverage.info
+	@rm -f */*/*.gcno */*/*.gcda */*.gcno */*.gcda
 .PHONY: gcov_report
 
 # gcov_report: clean
