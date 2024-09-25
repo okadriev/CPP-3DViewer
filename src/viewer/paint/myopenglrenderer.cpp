@@ -6,8 +6,6 @@ MyOpenGLRenderer::MyOpenGLRenderer(QOpenGLWidget *glWidget, QObject *parent)
 }
 
 void MyOpenGLRenderer::initializeGL() {
-  // qDebug() << "MyOpenGLRenderer::initializeGL called";
-
   m_glWidget->makeCurrent();
   initializeOpenGLFunctions();
   SettingInfo &settings = *settinginfo();
@@ -58,14 +56,7 @@ void MyOpenGLRenderer::initializeGL() {
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void MyOpenGLRenderer::paintGL() {
-  // qDebug() << "MyOpenGLRenderer::paintGL called";
-}
-
-// void MyOpenGLRenderer::resizeGL(int w, int h) {
-//   glViewport(0, 0, w, h);
-//   // Дополнительный код для обработки изменения размера
-// }
+void MyOpenGLRenderer::paintGL() {}
 
 QColor MyOpenGLRenderer::get_color() {
   SettingInfo *info = settinginfo();
@@ -87,22 +78,3 @@ QColor MyOpenGLRenderer::get_points_color() {
              ? QColor(QString::fromStdString(*info->vertex_color))
              : QColor();
 }
-
-// float MyOpenGLRenderer::get_line_thickness() {
-//   GLfloat lineWidthRange[2];
-//   GLfloat lineWidthGranularity;
-
-//   glGetFloatv(GL_LINE_WIDTH_RANGE, lineWidthRange);
-//   glGetFloatv(GL_LINE_WIDTH_GRANULARITY, &lineWidthGranularity);
-//   qDebug() << "lineWidthRange[0]: " << lineWidthRange[0]
-//            << " lineWidthRange[1]: " << lineWidthRange[1]
-//            << " settinginfo()->edge_thickness: "
-//            << settinginfo()->edge_thickness;
-//            thickness = settinginfo()->edge_thickness;
-//   float thickness = (lineWidthRange[1] - lineWidthRange[0]) /
-//                         lineWidthGranularity * settinginfo()->edge_thickness
-//                         +
-//                     lineWidthRange[0];
-
-//   return thickness;
-// }

@@ -12,7 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
   ui->MainStackedWidget->setCurrentIndex(I_ONE);
   connect(t, &QTimer::timeout, this, &MainWindow::new_frame);
 
-  setupOpenGL();
+  openGLWidget = ui->openGLWidget;
+  controller.setupOpenGL(openGLWidget);
   updateInfoLabel();
   update_edges();
   update_vertex();
@@ -453,15 +454,3 @@ void MainWindow::update_scale() {
 //   connect(ui->CenterButton, &QPushButton::clicked, this,
 //           &MainWindow::on_CenterButton_clicked);
 // }
-
-void MainWindow::setupOpenGL() {
-  openGLWidget = ui->openGLWidget;
-
-  if (openGLWidget) {
-    m_renderer = new MyOpenGLRenderer(openGLWidget, this);
-    connect(openGLWidget, &QOpenGLWidget::aboutToCompose, m_renderer,
-            &MyOpenGLRenderer::initializeGL);
-    connect(openGLWidget, &QOpenGLWidget::frameSwapped, m_renderer,
-            &MyOpenGLRenderer::paintGL);
-  }
-}
